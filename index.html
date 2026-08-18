@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الحالة الشاملة — مخطّط صحي احترافي | أحمد الفولي</title>
+<meta name="description" content="تطبيق صحي احترافي: يحسب سعراتك وماكروزك، يقرأ تحاليل InBody والتحاليل الطبية، ويبني خطة غذائية وتدريبية مخصّصة حسب دولتك ولهجتك وميزانيتك.">
+<meta name="author" content="أحمد الفولي">
+<meta name="theme-color" content="#0FA36B">
+<meta property="og:type" content="website">
+<meta property="og:title" content="الحالة الشاملة — مخطّط صحي احترافي">
+<meta property="og:description" content="خطة غذائية وتدريبية ذكية بالعربية مع قراءة التحاليل الطبية وشرح متحرّك للتمارين.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230FA36B'/%3E%3Cpath d='M3.5 12h3.5l1.8-3.5 3 8 2-9 1.7 4.5H20' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF4F1; --card:#FFFFFF; --ink:#0C2A22; --muted:#5A7268; --line:#D9E6DF;
+  --green:#0FA36B; --green-deep:#097A50; --green-soft:#E1F4EB;
+  --amber:#EEA23A; --amber-soft:#FCF0DA;
+  --rose:#DD6248; --rose-soft:#FBE6E0;
+  --indigo:#5860D6; --indigo-soft:#E8E9FA;
+  --teal:#118A9B; --teal-soft:#DDF1F3;
+  --radius:18px; --shadow:0 10px 30px rgba(12,42,34,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"IBM Plex Sans Arabic",system-ui,Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;min-height:100vh}
+h1,h2,h3,h4,.display{font-family:"Baloo Bhaijaan 2","IBM Plex Sans Arabic",sans-serif}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1040px;margin:0 auto;padding:22px 16px 80px}
+
+header.top{display:flex;align-items:center;gap:12px;padding:12px 0 22px}
+.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--green),var(--teal));display:grid;place-items:center;color:#fff;flex:none;box-shadow:0 6px 18px rgba(15,163,107,.35)}
+.logo svg{width:27px;height:27px}
+.brand h1{font-size:22px;font-weight:800;line-height:1.2}
+.brand p{font-size:13px;color:var(--muted)}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+#wizard{padding:26px 26px 30px;max-width:760px;margin:0 auto}
+.steps-bar{display:flex;gap:7px;margin-bottom:8px}
+.steps-bar span{height:6px;flex:1;border-radius:99px;background:var(--line);transition:background .3s}
+.steps-bar span.on{background:var(--green)}
+.step-label{font-size:13px;color:var(--muted);margin-bottom:16px}
+.step h2{font-size:24px;font-weight:800;margin-bottom:4px}
+.step .hint{color:var(--muted);font-size:14px;margin-bottom:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.field{margin-bottom:15px}
+.field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+.field .sub{font-weight:400;color:var(--muted);font-size:12px}
+input,select{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;font:inherit;background:#FBFDFC;color:var(--ink);outline:none;transition:border .2s}
+input:focus,select:focus{border-color:var(--green)}
+input.err{border-color:var(--rose);background:var(--rose-soft)}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.seg button{flex:1;min-width:84px;padding:10px;border:1.5px solid var(--line);border-radius:12px;background:#FBFDFC;font:inherit;font-weight:600;font-size:14px;cursor:pointer;color:var(--muted);transition:all .15s}
+.seg button.on{background:var(--green-soft);border-color:var(--green);color:var(--green-deep)}
+.seg button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.pace-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pace-cards button{border:1.5px solid var(--line);border-radius:14px;background:#FBFDFC;padding:11px;font:inherit;cursor:pointer;text-align:center;transition:all .15s}
+.pace-cards button.on{border-color:var(--green);background:var(--green-soft)}
+.pace-cards .t{font-weight:700;font-size:14px}.pace-cards .d{font-size:12px;color:var(--muted)}
+.check{display:flex;align-items:center;gap:10px;padding:11px 13px;border:1.5px solid var(--line);border-radius:12px;background:#FBFDFC;cursor:pointer;font-size:14px;font-weight:600;margin-bottom:9px}
+.check input{width:18px;height:18px;accent-color:var(--green);flex:none}
+
+/* advanced accordion */
+.acc{border:1.5px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden;background:#FBFDFC}
+.acc>summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-size:16px}
+.acc>summary .cv{margin-inline-start:auto;font-size:18px;color:var(--muted);transition:transform .2s}
+.acc[open]>summary .cv{transform:rotate(45deg)}
+.acc .body{padding:4px 16px 16px}
+.acc.sugar>summary .ic{background:var(--rose-soft)}
+.acc.liver>summary .ic{background:var(--amber-soft)}
+.acc.kidney>summary .ic{background:var(--teal-soft)}
+.acc.lipid>summary .ic{background:var(--indigo-soft)}
+.acc.inbody>summary .ic{background:var(--green-soft)}
+.acc.other>summary .ic{background:#EFEFEF}
+.acc small.note{display:block;color:var(--muted);font-size:12px;margin:-2px 0 12px}
+
+.nav{display:flex;justify-content:space-between;margin-top:24px;gap:10px}
+.btn{font:inherit;font-weight:700;border:none;border-radius:13px;padding:13px 24px;cursor:pointer;transition:transform .12s,box-shadow .12s;font-size:15px}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid var(--green-deep);outline-offset:2px}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 6px 16px rgba(15,163,107,.3)}
+.btn-primary:hover{background:var(--green-deep)}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line)}
+.btn-ghost:hover{color:var(--ink)}
+.btn-skip{background:transparent;color:var(--green-deep);border:1.5px dashed var(--green);font-size:14px;padding:11px 18px}
+.form-err{display:none;color:var(--rose);background:var(--rose-soft);border-radius:10px;padding:10px 14px;font-size:13px;margin-top:14px}
+.form-err.show{display:block}
+
+#dash{display:none}
+.dash-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.dash-head h2{font-size:26px;font-weight:800}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:99px}
+.chip.g{background:var(--green-soft);color:var(--green-deep)}
+.chip.a{background:var(--amber-soft);color:#8A5A0E}
+.chip.r{background:var(--rose-soft);color:#992F1A}
+.chip.i{background:var(--indigo-soft);color:#363FA6}
+.chip.t{background:var(--teal-soft);color:#0A6472}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.section{margin-bottom:26px}
+.section>h3{font-size:19px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section>h3 .dot{width:10px;height:10px;border-radius:3px;background:var(--green);display:inline-block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+
+.hero{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center}
+.ring-wrap{position:relative;width:220px;height:220px;margin:0 auto}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-center .big{font-family:"Baloo Bhaijaan 2";font-size:44px;font-weight:800;line-height:1;color:var(--ink)}
+.ring-center .lbl{font-size:13px;color:var(--muted);margin-top:4px}
+.ring-anim{transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+.macro-legend{display:grid;gap:12px}
+.macro-row{display:flex;align-items:center;gap:12px}
+.macro-row .sw{width:14px;height:14px;border-radius:5px;flex:none}
+.macro-row .nm{font-weight:700;font-size:15px;min-width:92px}
+.macro-row .val{font-size:14px;color:var(--muted)}
+.macro-bar{height:8px;border-radius:99px;background:var(--line);flex:1;overflow:hidden}
+.macro-bar i{display:block;height:100%;border-radius:99px;width:0;transition:width 1s ease .3s}
+.hero-note{grid-column:1/-1;font-size:13.5px;color:var(--muted);background:var(--green-soft);border-radius:12px;padding:10px 14px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 17px;box-shadow:var(--shadow)}
+.stat .k{font-size:12.5px;color:var(--muted);font-weight:600}
+.stat .v{font-family:"Baloo Bhaijaan 2";font-size:25px;font-weight:800;line-height:1.3}
+.stat .u{font-size:12px;color:var(--muted)}
+
+/* labs analysis */
+.lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.lab-item{border:1px solid var(--line);border-radius:14px;padding:13px 15px;background:#FBFDFC;position:relative}
+.lab-item .lh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.lab-item .lname{font-weight:700;font-size:14px}
+.lab-item .lval{font-family:"Baloo Bhaijaan 2";font-size:19px;font-weight:800}
+.lab-item .lref{font-size:12px;color:var(--muted);margin-top:3px}
+.lab-item .lbadge{display:inline-block;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:99px;margin-top:8px}
+.lab-item.ok{border-inline-start:4px solid var(--green)}
+.lab-item.warn{border-inline-start:4px solid var(--amber)}
+.lab-item.bad{border-inline-start:4px solid var(--rose)}
+.lab-item.ok .lbadge{background:var(--green-soft);color:var(--green-deep)}
+.lab-item.warn .lbadge{background:var(--amber-soft);color:#8A5A0E}
+.lab-item.bad .lbadge{background:var(--rose-soft);color:#992F1A}
+.sys-title{font-weight:800;font-size:15px;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.sys-title:first-child{margin-top:0}
+.sys-title .si{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:14px}
+.adapt{margin-top:18px;background:var(--teal-soft);border-radius:14px;padding:16px 18px}
+.adapt h4{font-size:15px;margin-bottom:8px;color:#0A6472}
+.adapt ul{padding-inline-start:20px}
+.adapt li{font-size:14px;margin-bottom:6px}
+
+#projSvg{width:100%;height:auto;display:block}
+.proj-meta{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:12px;font-size:14px}
+
+.timeline{position:relative;padding-inline-end:26px}
+.timeline::before{content:"";position:absolute;inset-inline-end:8px;top:6px;bottom:6px;width:2px;background:var(--line);border-radius:2px}
+.t-item{position:relative;padding:0 0 18px}
+.t-item::before{content:"";position:absolute;inset-inline-end:-24px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--card);border:3px solid var(--green)}
+.t-item.sleep::before{border-color:var(--indigo)}.t-item.food::before{border-color:var(--amber)}.t-item.move::before{border-color:var(--rose)}
+.t-item .tm{font-family:"Baloo Bhaijaan 2";font-weight:800;font-size:15px;color:var(--green-deep)}
+.t-item .tt{font-weight:700;font-size:15px}.t-item .td{font-size:13.5px;color:var(--muted)}
+
+.meal-card{margin-bottom:14px}
+.meal-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.meal-head h4{font-size:17px;font-weight:800}
+.meal-kcal{font-size:13px;font-weight:700;color:#8A5A0E;background:var(--amber-soft);padding:5px 12px;border-radius:99px}
+.opt-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.opt-tabs button{font:inherit;font-size:13px;font-weight:600;padding:7px 14px;border-radius:99px;cursor:pointer;border:1.5px solid var(--line);background:#FBFDFC;color:var(--muted);transition:all .15s}
+.opt-tabs button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+table.foods{width:100%;border-collapse:collapse;font-size:14px}
+table.foods th{font-size:12px;color:var(--muted);font-weight:600;text-align:right;padding:4px 8px;border-bottom:1px solid var(--line)}
+table.foods td{padding:7px 8px;border-bottom:1px dashed var(--line)}
+table.foods tr:last-child td{border-bottom:none}
+table.foods .g{font-weight:700;color:var(--green-deep)}
+table.foods tr.tot-row td{border-top:2px solid var(--line);border-bottom:none;background:var(--green-soft);color:var(--green-deep)}
+.meal-total{font-size:12.5px;color:var(--muted);margin-top:8px}
+.swap-note{font-size:13px;color:var(--muted);background:#FBFDFC;border:1px dashed var(--line);border-radius:12px;padding:10px 14px;margin-top:10px}
+
+/* exercise library */
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.ex-card{border:1px solid var(--line);border-radius:16px;background:#FBFDFC;padding:16px;display:flex;flex-direction:column}
+.ex-stage{background:linear-gradient(160deg,#F3FAF6,#E8F3EE);border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;padding:6px;margin-bottom:12px}
+.ex-svg{width:150px;height:170px}
+.fig-line{stroke:var(--green-deep);stroke-width:6;stroke-linecap:round;fill:none}
+.fig-fill{fill:var(--green-deep)}
+.fig-joint{fill:#fff;stroke:var(--green-deep);stroke-width:1.5}
+.fig-load{stroke:var(--rose);stroke-width:5;stroke-linecap:round}
+.fig-ground{stroke:var(--line);stroke-width:3;stroke-linecap:round}
+.pose-b{opacity:0}
+@keyframes exA{0%,42%{opacity:1}54%,100%{opacity:0}}
+@keyframes exB{0%,42%{opacity:0}54%,100%{opacity:1}}
+.animate .pose-a{animation:exA 2s infinite}
+.animate .pose-b{animation:exB 2s infinite}
+.ex-card h4{font-size:16px;font-weight:800;margin-bottom:2px}
+.ex-eq{font-size:12px;color:var(--muted);margin-bottom:8px}
+.ex-card ul{padding-inline-start:18px;margin-top:2px}
+.ex-card li{font-size:13px;margin-bottom:5px;color:var(--ink)}
+.ex-tag{align-self:flex-start;margin-top:auto;font-size:11.5px;font-weight:700;background:var(--green-soft);color:var(--green-deep);padding:4px 10px;border-radius:99px}
+
+.wk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.wk-day{border:1px solid var(--line);border-radius:14px;padding:16px;background:#FBFDFC}
+.wk-day h4{font-size:15px;font-weight:800;margin-bottom:8px;color:var(--green-deep)}
+.wk-day ul{list-style:none}
+.wk-day li{font-size:13.5px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.wk-day li:last-child{border-bottom:none}
+.wk-extra{margin-top:14px;font-size:14px;background:var(--rose-soft);border-radius:12px;padding:12px 16px}
+
+.tips{padding-inline-start:20px}.tips li{margin-bottom:8px;font-size:14.5px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.warn{background:var(--rose-soft);border:1px solid #F2C3B5;color:#7E2E1B;border-radius:12px;padding:12px 16px;font-size:14px;margin-bottom:12px}
+.warn.blue{background:var(--indigo-soft);border-color:#C7C9F2;color:#2E3390}
+.disclaimer{font-size:12.5px;color:var(--muted);text-align:center;margin-top:32px;line-height:1.9}
+.site-footer{margin-top:34px}
+.dev-card{background:linear-gradient(135deg,#0C2A22,#0B6B47 55%,#118A9B);color:#fff;border-radius:22px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.dev-card::after{content:"";position:absolute;inset-inline-end:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.06)}
+.dev-head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;position:relative;z-index:1}
+.dev-avatar{width:54px;height:54px;border-radius:15px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-family:"Baloo Bhaijaan 2";font-size:26px;font-weight:800;flex:none}
+.dev-name{font-family:"Baloo Bhaijaan 2";font-size:21px;font-weight:800;line-height:1.2}
+.dev-role{font-size:13px;opacity:.85}
+.visitor-badge{margin-inline-start:auto;display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:8px 15px;border-radius:99px}
+.visitor-badge .vb-count{font-family:"Baloo Bhaijaan 2";font-size:19px;font-weight:800;min-width:22px;text-align:center}
+.visitor-badge .vb-label{font-size:12px;opacity:.85}
+.dev-sub{font-size:14px;opacity:.92;margin:18px 0 12px;position:relative;z-index:1}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;position:relative;z-index:1}
+.contact-btn{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;text-decoration:none;padding:12px 15px;border-radius:13px;font-size:14px;font-weight:700;transition:background .15s,transform .12s}
+.contact-btn:hover{background:rgba(255,255,255,.24)}
+.contact-btn:active{transform:scale(.98)}
+.contact-btn svg{width:22px;height:22px;flex:none}
+.contact-btn small{display:block;opacity:.82;font-weight:500;font-size:12px;letter-spacing:.3px}
+.dev-copy{text-align:center;font-size:12px;color:var(--muted);margin-top:16px}
+@media print{.site-footer{display:none}}
+footer.credit{text-align:center;color:var(--muted);font-size:12px;margin-top:26px}
+
+@media (max-width:720px){
+  .grid2,.grid3,.two-col{grid-template-columns:1fr}
+  .hero{grid-template-columns:1fr}.pace-cards{grid-template-columns:1fr}
+  #wizard{padding:20px 15px 24px}
+}
+@media print{
+  .actions,.btn,#wizard,footer.credit{display:none!important}
+  .card,.stat,.panel{box-shadow:none;border-color:#ccc}.wrap{padding:0}
+  .animate .pose-a{animation:none;opacity:1}.animate .pose-b{opacity:0}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.pose-b{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 21c4.5-3.5 8-6.8 8-11a5 5 0 0 0-8-4 5 5 0 0 0-8 4c0 4.2 3.5 7.5 8 11z" fill="currentColor" stroke="none" opacity=".22"/>
+        <path d="M3.5 12h3.5l1.8-3.5 3 8 2-9 1.7 4.5H20"/>
+      </svg>
+    </div>
+    <div class="brand">
+      <h1>الحالة الشاملة</h1>
+      <p>تحليل InBody والتحاليل الطبية + خطة غذائية وتدريبية احترافية بشرح متحرّك للتمارين</p>
+    </div>
+  </header>
+
+  <!-- ============ WIZARD ============ -->
+  <div id="wizard" class="panel">
+    <div class="steps-bar" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="step-label num" id="stepLabel">الخطوة 1 من 4</div>
+
+    <!-- STEP 1 -->
+    <section class="step" id="step1">
+      <h2>البيانات الأساسية</h2>
+      <p class="hint">أساس حساب سعراتك — كل شيء يُحسب داخل متصفحك ولا يُرسل لأي مكان.</p>
+      <div class="grid2">
+        <div class="field"><label for="inName">الاسم <span class="sub">(اختياري)</span></label><input type="text" id="inName" placeholder="مثال: أحمد"></div>
+        <div class="field"><label for="inCountry">الدولة <span class="sub">لتخصيص الأكل واللهجة</span></label>
+          <select id="inCountry">
+            <option value="eg">🇪🇬 مصر</option><option value="sa">🇸🇦 السعودية</option><option value="ye">🇾🇪 اليمن</option>
+            <option value="sy">🇸🇾 سوريا</option><option value="sd">🇸🇩 السودان</option><option value="ly">🇱🇾 ليبيا</option>
+            <option value="dz">🇩🇿 الجزائر</option><option value="tn">🇹🇳 تونس</option><option value="ma">🇲🇦 المغرب</option>
+          </select></div>
+      </div>
+      <div class="field"><label>الجنس</label><div class="seg" id="segGender"><button type="button" data-v="m" class="on">ذكر</button><button type="button" data-v="f">أنثى</button></div></div>
+      <div class="grid2">
+        <div class="field"><label for="inAge">العمر <span class="sub">سنة</span></label><input type="number" id="inAge" min="14" max="90" placeholder="28"></div>
+        <div class="field"><label for="inHeight">الطول <span class="sub">سم</span></label><input type="number" id="inHeight" min="120" max="230" placeholder="175"></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="inWeight">الوزن الحالي <span class="sub">كجم</span></label><input type="number" id="inWeight" min="35" max="300" step="0.5" placeholder="92"></div>
+        <div class="field"><label for="inTarget">الوزن المستهدف <span class="sub">كجم</span></label><input type="number" id="inTarget" min="35" max="300" step="0.5" placeholder="80"></div>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section class="step" id="step2" hidden>
+      <h2>النشاط والتدريب</h2>
+      <p class="hint">لضبط احتياجك اليومي وبناء برنامج تمرين يناسب واقعك.</p>
+      <div class="field"><label for="inActivity">النشاط اليومي <span class="sub">(بدون التمرين المخطط)</span></label>
+        <select id="inActivity">
+          <option value="1.2">خامل — مكتبي وحركة قليلة جدًا</option>
+          <option value="1.375" selected>خفيف — مشي بسيط متقطع</option>
+          <option value="1.55">متوسط — حركة مستمرة معظم اليوم</option>
+          <option value="1.725">عالٍ — عمل بدني</option>
+          <option value="1.9">عالٍ جدًا — عمل شاق يوميًا</option>
+        </select></div>
+      <div class="field" id="paceField"><label>وتيرة التغيير الأسبوعية</label>
+        <div class="pace-cards" id="paceCards">
+          <button type="button" data-v="0.25"><span class="t">هادئة</span><br><span class="d num">0.25 كجم/أسبوع</span></button>
+          <button type="button" data-v="0.5" class="on"><span class="t">متوازنة ⭐</span><br><span class="d num">0.5 كجم/أسبوع</span></button>
+          <button type="button" data-v="0.75"><span class="t">سريعة</span><br><span class="d num">0.75 كجم/أسبوع</span></button>
+        </div></div>
+      <div class="grid2">
+        <div class="field"><label for="inDays">أيام التدريب أسبوعيًا</label>
+          <select id="inDays"><option value="2">يومان</option><option value="3" selected>3 أيام</option><option value="4">4 أيام</option><option value="5">5 أيام</option><option value="6">6 أيام</option></select></div>
+        <div class="field"><label>مكان التدريب</label><div class="seg" id="segPlace"><button type="button" data-v="gym" class="on">الجيم</button><button type="button" data-v="home">المنزل</button></div></div>
+      </div>
+      <div class="field"><label>وقت التمرين المفضّل</label><div class="seg" id="segWTime"><button type="button" data-v="morning">الصباح</button><button type="button" data-v="afternoon">بعد الظهر</button><button type="button" data-v="evening" class="on">المساء</button></div></div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section class="step" id="step3" hidden>
+      <h2>نمط اليوم والطعام</h2>
+      <p class="hint">لبناء جدول واقعي يناسب حياتك.</p>
+      <div class="grid2">
+        <div class="field"><label for="inWake">وقت الاستيقاظ</label><input type="time" id="inWake" value="07:00"></div>
+        <div class="field"><label for="inBed">وقت النوم</label><input type="time" id="inBed" value="23:00"></div>
+      </div>
+      <div class="field"><label>عدد الوجبات اليومية</label><div class="seg" id="segMeals"><button type="button" data-v="3">3 وجبات</button><button type="button" data-v="4" class="on">4 وجبات</button><button type="button" data-v="5">5 وجبات</button></div></div>
+      <div class="field"><label>المستوى المادي <span class="sub">لاقتراح خيارات في متناولك</span></label>
+        <div class="seg" id="segBudget"><button type="button" data-v="1">اقتصادي</button><button type="button" data-v="2" class="on">متوسط</button><button type="button" data-v="3">مرتفع</button></div></div>
+      <label class="check"><input type="checkbox" id="inVeg"> أفضّل خيارات نباتية (بدون لحوم/دواجن/أسماك)</label>
+      <label class="check"><input type="checkbox" id="inNoDairy"> أتجنّب منتجات الألبان</label>
+    </section>
+
+    <!-- STEP 4 -->
+    <section class="step" id="step4" hidden>
+      <h2>بيانات متقدمة <span class="sub" style="font-size:14px;font-weight:600">— كلها اختيارية</span></h2>
+      <p class="hint">أدخل ما لديك من نتائج جهاز <b>InBody</b> أو تحاليلك الطبية، وسيقرأها التطبيق ويكيّف خطتك عليها. اترك أي خانة فارغة إن لم تتوفر.</p>
+
+      <details class="acc inbody"><summary><span class="ic">💪</span> تحليل InBody / تكوين الجسم <span class="cv">+</span></summary>
+        <div class="body">
+          <div class="grid3">
+            <div class="field"><label for="inBF">نسبة الدهون <span class="sub">PBF %</span></label><input type="number" id="inBF" min="3" max="70" step="0.1" placeholder="28"></div>
+            <div class="field"><label for="inSMM">الكتلة العضلية <span class="sub">SMM كجم</span></label><input type="number" id="inSMM" min="10" max="70" step="0.1" placeholder="32"></div>
+            <div class="field"><label for="inVFat">دهون حشوية <span class="sub">Level</span></label><input type="number" id="inVFat" min="1" max="30" placeholder="12"></div>
+          </div>
+          <div class="grid3">
+            <div class="field"><label for="inBMRm">معدل الأيض المقاس <span class="sub">BMR سعر</span></label><input type="number" id="inBMRm" min="800" max="3500" placeholder="1650"></div>
+            <div class="field"><label for="inTBW">ماء الجسم <span class="sub">لتر</span></label><input type="number" id="inTBW" min="15" max="70" step="0.1" placeholder="42"></div>
+            <div class="field"><label for="inWHR">محيط الخصر <span class="sub">سم</span></label><input type="number" id="inWHR" min="50" max="200" placeholder="98"></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc sugar"><summary><span class="ic">🩸</span> السكري وسكر الدم <span class="cv">+</span></summary>
+        <div class="body">
+          <div class="grid2">
+            <div class="field"><label for="inGlu">سكر صائم <span class="sub">mg/dL</span></label><input type="number" id="inGlu" min="40" max="500" placeholder="95"></div>
+            <div class="field"><label for="inA1c">السكر التراكمي <span class="sub">HbA1c %</span></label><input type="number" id="inA1c" min="3" max="16" step="0.1" placeholder="5.4"></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc liver"><summary><span class="ic">🫀</span> وظائف الكبد ودهون الكبد <span class="cv">+</span></summary>
+        <div class="body">
+          <div class="grid3">
+            <div class="field"><label for="inALT">ALT / SGPT <span class="sub">U/L</span></label><input type="number" id="inALT" min="1" max="500" placeholder="22"></div>
+            <div class="field"><label for="inAST">AST / SGOT <span class="sub">U/L</span></label><input type="number" id="inAST" min="1" max="500" placeholder="20"></div>
+            <div class="field"><label for="inGGT">GGT <span class="sub">U/L</span></label><input type="number" id="inGGT" min="1" max="500" placeholder="30"></div>
+          </div>
+          <div class="field"><label for="inFatty">درجة دهون الكبد <span class="sub">من السونار</span></label>
+            <select id="inFatty"><option value="">— غير معروفة —</option><option value="0">لا يوجد</option><option value="1">بسيطة (Grade I)</option><option value="2">متوسطة (Grade II)</option><option value="3">شديدة (Grade III)</option></select></div>
+        </div>
+      </details>
+
+      <details class="acc kidney"><summary><span class="ic">🧪</span> وظائف الكلى <span class="cv">+</span></summary>
+        <div class="body">
+          <small class="note">مهم لضبط كمية البروتين في خطتك بأمان.</small>
+          <div class="grid2">
+            <div class="field"><label for="inCr">الكرياتينين <span class="sub">mg/dL</span></label><input type="number" id="inCr" min="0.2" max="15" step="0.01" placeholder="0.9"></div>
+            <div class="field"><label for="inEGFR">معدل الترشيح eGFR <span class="sub">mL/min</span></label><input type="number" id="inEGFR" min="5" max="160" placeholder="98"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label for="inUrea">اليوريا / BUN <span class="sub">mg/dL</span></label><input type="number" id="inUrea" min="2" max="200" placeholder="15"></div>
+            <div class="field"><label for="inUric">حمض اليوريك <span class="sub">mg/dL</span></label><input type="number" id="inUric" min="1" max="15" step="0.1" placeholder="5.2"></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc lipid"><summary><span class="ic">🧈</span> دهون الدم والضغط <span class="cv">+</span></summary>
+        <div class="body">
+          <div class="grid2">
+            <div class="field"><label for="inChol">الكوليسترول الكلي <span class="sub">mg/dL</span></label><input type="number" id="inChol" min="80" max="500" placeholder="180"></div>
+            <div class="field"><label for="inLDL">الضار LDL <span class="sub">mg/dL</span></label><input type="number" id="inLDL" min="30" max="400" placeholder="100"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label for="inHDL">النافع HDL <span class="sub">mg/dL</span></label><input type="number" id="inHDL" min="15" max="120" placeholder="50"></div>
+            <div class="field"><label for="inTG">الدهون الثلاثية <span class="sub">mg/dL</span></label><input type="number" id="inTG" min="30" max="1000" placeholder="120"></div>
+          </div>
+          <div class="grid2">
+            <div class="field"><label for="inSys">الضغط الانقباضي <span class="sub">mmHg</span></label><input type="number" id="inSys" min="70" max="250" placeholder="118"></div>
+            <div class="field"><label for="inDia">الضغط الانبساطي <span class="sub">mmHg</span></label><input type="number" id="inDia" min="40" max="150" placeholder="76"></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="acc other"><summary><span class="ic">☀️</span> فيتامينات وأخرى <span class="cv">+</span></summary>
+        <div class="body">
+          <div class="grid2">
+            <div class="field"><label for="inVitD">فيتامين د <span class="sub">ng/mL</span></label><input type="number" id="inVitD" min="3" max="150" placeholder="32"></div>
+            <div class="field"><label for="inHb">الهيموجلوبين <span class="sub">g/dL</span></label><input type="number" id="inHb" min="5" max="20" step="0.1" placeholder="14"></div>
+          </div>
+          <div class="field"><label for="inTSH">هرمون الغدة TSH <span class="sub">mIU/L</span></label><input type="number" id="inTSH" min="0.1" max="30" step="0.01" placeholder="2.1"></div>
+        </div>
+      </details>
+
+      <div class="warn blue" style="margin-top:14px">🔒 هذه القراءات لأغراض تثقيفية وتخصيص الخطة فقط، وليست تشخيصًا طبيًا. أي قيمة خارج النطاق الطبيعي تحتاج مراجعة طبيبك.</div>
+    </section>
+
+    <div class="form-err" id="formErr" role="alert"></div>
+    <div class="nav">
+      <button class="btn btn-ghost" id="btnBack" style="visibility:hidden">السابق</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-skip" id="btnSkip" hidden>تخطّي وإنشاء الخطة</button>
+        <button class="btn btn-primary" id="btnNext">التالي</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="dash"></div>
+  <footer class="site-footer">
+    <div class="dev-card">
+      <div class="dev-head">
+        <div class="dev-avatar" aria-hidden="true">أ</div>
+        <div>
+          <div class="dev-name">أحمد الفولي</div>
+          <div class="dev-role">مصمّم ومطوّر التطبيق</div>
+        </div>
+        <div class="visitor-badge" title="عدد زيارات التطبيق">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="vb-label">الزوّار</span><span class="vb-count num" id="visitorCount">…</span>
+        </div>
+      </div>
+      <div class="dev-sub">لمزيد من التطبيقات أو لطلبات التصميم والتطوير، تواصل معي:</div>
+      <div class="contact-grid">
+        <a class="contact-btn" href="https://wa.me/201284537045" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.6.2-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.5-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.6-1.5-.9-2.1-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+          واتساب<small>01284537045</small></a>
+        <a class="contact-btn" href="tel:+201070276039">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+          موبايل<small>01070276039</small></a>
+        <a class="contact-btn" href="https://www.facebook.com/ahmed.fooly" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="#4267B2"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg>
+          فيسبوك<small>ahmed.fooly</small></a>
+        <a class="contact-btn" href="mailto:ahmedfouly08@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          إيميل<small>ahmedfouly08@gmail.com</small></a>
+      </div>
+      <div class="dev-copy num">© 2025 أحمد الفولي — جميع الحقوق محفوظة</div>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const state={name:"",gender:"m",age:null,height:null,weight:null,target:null,activity:1.375,pace:0.5,days:3,place:"gym",wtime:"evening",wake:"07:00",bed:"23:00",meals:4,veg:false,noDairy:false,country:"eg",budget:2};
+const med={};
+let step=1;
+
+function bindSeg(id,key,cast){const seg=$(id);seg.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;$$("button",seg).forEach(x=>x.classList.remove("on"));b.classList.add("on");state[key]=cast?cast(b.dataset.v):b.dataset.v;});}
+bindSeg("#segGender","gender");bindSeg("#segPlace","place");bindSeg("#segWTime","wtime");bindSeg("#segMeals","meals",Number);bindSeg("#paceCards","pace",Number);bindSeg("#segBudget","budget",Number);
+$("#inCountry").addEventListener("change",e=>state.country=e.target.value);
+
+const stepsEls=[$("#step1"),$("#step2"),$("#step3"),$("#step4")];
+function showStep(n){
+  step=n;
+  stepsEls.forEach((el,i)=>el.hidden=(i!==n-1));
+  $$(".steps-bar span").forEach((s,i)=>s.classList.toggle("on",i<n));
+  $("#stepLabel").textContent=`الخطوة ${n} من 4`;
+  $("#btnBack").style.visibility=n===1?"hidden":"visible";
+  $("#btnNext").textContent=n===4?"🎯 أنشئ خطتي الشاملة":"التالي";
+  $("#btnSkip").hidden=(n!==4);
+  $("#formErr").classList.remove("show");
+  if(n===2){const w=+$("#inWeight").value,t=+$("#inTarget").value;$("#paceField").style.display=(w&&t&&Math.abs(w-t)<1)?"none":"";}
+}
+function fail(msg,el){const b=$("#formErr");b.textContent=msg;b.classList.add("show");if(el){el.classList.add("err");el.focus();setTimeout(()=>el.classList.remove("err"),2500);}return false;}
+function validate(n){
+  if(n===1){
+    const age=+$("#inAge").value,h=+$("#inHeight").value,w=+$("#inWeight").value,t=+$("#inTarget").value;
+    if(!age||age<14||age>90)return fail("أدخل عمرًا صحيحًا بين 14 و90 سنة.",$("#inAge"));
+    if(!h||h<120||h>230)return fail("أدخل الطول بالسنتيمتر (120–230).",$("#inHeight"));
+    if(!w||w<35||w>300)return fail("أدخل وزنك الحالي بالكيلوجرام.",$("#inWeight"));
+    if(!t||t<35||t>300)return fail("أدخل الوزن المستهدف بالكيلوجرام.",$("#inTarget"));
+    state.name=$("#inName").value.trim();state.country=$("#inCountry").value;state.age=age;state.height=h;state.weight=w;state.target=t;
+  }
+  if(n===2){state.activity=+$("#inActivity").value;state.days=+$("#inDays").value;}
+  if(n===3){state.wake=$("#inWake").value||"07:00";state.bed=$("#inBed").value||"23:00";state.veg=$("#inVeg").checked;state.noDairy=$("#inNoDairy").checked;}
+  return true;
+}
+function collectMed(){
+  const g=id=>{const v=parseFloat($(id).value);return isNaN(v)?null:v;};
+  Object.assign(med,{
+    bf:g("#inBF"),smm:g("#inSMM"),vfat:g("#inVFat"),bmrm:g("#inBMRm"),tbw:g("#inTBW"),waist:g("#inWHR"),
+    glu:g("#inGlu"),a1c:g("#inA1c"),alt:g("#inALT"),ast:g("#inAST"),ggt:g("#inGGT"),fatty:$("#inFatty").value===""?null:+$("#inFatty").value,
+    cr:g("#inCr"),egfr:g("#inEGFR"),urea:g("#inUrea"),uric:g("#inUric"),
+    chol:g("#inChol"),ldl:g("#inLDL"),hdl:g("#inHDL"),tg:g("#inTG"),sys:g("#inSys"),dia:g("#inDia"),
+    vitd:g("#inVitD"),hb:g("#inHb"),tsh:g("#inTSH")
+  });
+}
+$("#btnNext").addEventListener("click",()=>{if(!validate(step))return;if(step<4)showStep(step+1);else{collectMed();buildPlan();}});
+$("#btnSkip").addEventListener("click",()=>{collectMed();buildPlan();});
+$("#btnBack").addEventListener("click",()=>showStep(step-1));
+
+/* ============ Medical interpretation ============ */
+function classify(v,ranges){for(const r of ranges){if(v>=r[0]&&v<=r[1])return r[2];}return"ok";}
+function analyzeMed(){
+  const m=med,s=state,items=[],flags={};const push=(sys,name,val,unit,status,ref,tip)=>items.push({sys,name,val,unit,status,ref,tip});
+  // sugar
+  if(m.glu!=null){const st=m.glu<100?"ok":m.glu<126?"warn":"bad";push("sugar","سكر صائم",m.glu,"mg/dL",st,"طبيعي < 100",st==="ok"?"ضمن الطبيعي.":st==="warn"?"مقدمات سكري (100–125).":"ضمن نطاق السكري (≥126).");if(st==="warn")flags.prediab=true;if(st==="bad")flags.diabetes=true;}
+  if(m.a1c!=null){const st=m.a1c<5.7?"ok":m.a1c<6.5?"warn":"bad";push("sugar","تراكمي HbA1c",m.a1c,"%",st,"طبيعي < 5.7",st==="ok"?"تحكّم ممتاز.":st==="warn"?"مقدمات سكري (5.7–6.4).":"يوافق تشخيص السكري (≥6.5).");if(st==="warn")flags.prediab=true;if(st==="bad")flags.diabetes=true;}
+  // liver
+  if(m.alt!=null){const st=m.alt<=40?"ok":m.alt<=80?"warn":"bad";push("liver","ALT",m.alt,"U/L",st,"طبيعي ≤ 40",st==="ok"?"طبيعي.":"مرتفع — قد يرتبط بدهون الكبد.");if(st!=="ok")flags.liver=true;}
+  if(m.ast!=null){const st=m.ast<=40?"ok":m.ast<=80?"warn":"bad";push("liver","AST",m.ast,"U/L",st,"طبيعي ≤ 40",st==="ok"?"طبيعي.":"مرتفع.");if(st!=="ok")flags.liver=true;}
+  if(m.ggt!=null){const st=m.ggt<=55?"ok":m.ggt<=110?"warn":"bad";push("liver","GGT",m.ggt,"U/L",st,"طبيعي ≤ 55",st==="ok"?"طبيعي.":"مرتفع.");if(st!=="ok")flags.liver=true;}
+  if(m.fatty!=null){const st=m.fatty===0?"ok":m.fatty===1?"warn":"bad";push("liver","دهون الكبد",["لا يوجد","بسيطة","متوسطة","شديدة"][m.fatty],"",st,"—",m.fatty===0?"لا دهون على الكبد.":"إنقاص الوزن والسكريات يعكسها غالبًا.");if(m.fatty>=1)flags.liver=true;}
+  // kidney
+  if(m.cr!=null){const hi=s.gender==="m"?1.3:1.1;const st=m.cr<=hi?"ok":m.cr<=hi*1.5?"warn":"bad";push("kidney","كرياتينين",m.cr,"mg/dL",st,`طبيعي ≤ ${hi}`,st==="ok"?"طبيعي.":"مرتفع — يحتاج متابعة.");if(st!=="ok")flags.kidney=true;}
+  if(m.egfr!=null){const st=m.egfr>=90?"ok":m.egfr>=60?"warn":"bad";push("kidney","eGFR",m.egfr,"mL/min",st,"طبيعي ≥ 90",st==="ok"?"ترشيح سليم.":st==="warn"?"انخفاض بسيط.":"انخفاض ملحوظ — راجع طبيب الكلى.");if(m.egfr<90)flags.kidney=true;if(m.egfr<60)flags.kidneySevere=true;}
+  if(m.urea!=null){const st=m.urea<=20?"ok":m.urea<=45?"warn":"bad";push("kidney","اليوريا",m.urea,"mg/dL",st,"طبيعي ≤ 20",st==="ok"?"طبيعي.":"مرتفع.");if(st!=="ok")flags.kidney=true;}
+  if(m.uric!=null){const hi=s.gender==="m"?7:6;const st=m.uric<=hi?"ok":m.uric<=hi+1.5?"warn":"bad";push("kidney","حمض اليوريك",m.uric,"mg/dL",st,`طبيعي ≤ ${hi}`,st==="ok"?"طبيعي.":"مرتفع — خطر النقرس.");if(st!=="ok")flags.uric=true;}
+  // lipids + bp
+  if(m.chol!=null){const st=m.chol<200?"ok":m.chol<240?"warn":"bad";push("lipid","كوليسترول كلي",m.chol,"mg/dL",st,"مرغوب < 200",st==="ok"?"جيد.":"مرتفع.");if(st!=="ok")flags.chol=true;}
+  if(m.ldl!=null){const st=m.ldl<130?"ok":m.ldl<160?"warn":"bad";push("lipid","الضار LDL",m.ldl,"mg/dL",st,"مرغوب < 130",st==="ok"?"جيد.":"مرتفع — قلّل الدهون المشبعة.");if(st!=="ok")flags.ldl=true;}
+  if(m.hdl!=null){const lo=s.gender==="m"?40:50;const st=m.hdl>=lo?"ok":m.hdl>=lo-10?"warn":"bad";push("lipid","النافع HDL",m.hdl,"mg/dL",st,`مرغوب ≥ ${lo}`,st==="ok"?"ممتاز — يحمي القلب.":"منخفض — الرياضة ترفعه.");if(st!=="ok")flags.hdl=true;}
+  if(m.tg!=null){const st=m.tg<150?"ok":m.tg<200?"warn":"bad";push("lipid","الدهون الثلاثية",m.tg,"mg/dL",st,"مرغوب < 150",st==="ok"?"جيد.":"مرتفع — قلّل السكر والنشويات.");if(st!=="ok")flags.tg=true;}
+  if(m.sys!=null&&m.dia!=null){const st=(m.sys<120&&m.dia<80)?"ok":(m.sys<140&&m.dia<90)?"warn":"bad";push("lipid","ضغط الدم",`${m.sys}/${m.dia}`,"mmHg",st,"مثالي < 120/80",st==="ok"?"مثالي.":st==="warn"?"مرتفع قليلًا.":"مرتفع — قلّل الملح وراجع طبيبك.");if(st!=="ok")flags.bp=true;}
+  // other
+  if(m.vitd!=null){const st=m.vitd>=30?"ok":m.vitd>=20?"warn":"bad";push("other","فيتامين د",m.vitd,"ng/mL",st,"كافٍ ≥ 30",st==="ok"?"كافٍ.":st==="warn"?"غير كافٍ.":"نقص — تعرّض للشمس وناقش المكمّل.");if(st!=="ok")flags.vitd=true;}
+  if(m.hb!=null){const lo=s.gender==="m"?13:12;const st=m.hb>=lo?"ok":"warn";push("other","هيموجلوبين",m.hb,"g/dL",st,`طبيعي ≥ ${lo}`,st==="ok"?"طبيعي.":"منخفض — احتمال أنيميا، أضف الحديد.");if(st!=="ok")flags.anemia=true;}
+  if(m.tsh!=null){const st=(m.tsh>=0.4&&m.tsh<=4.5)?"ok":"warn";push("other","الغدة TSH",m.tsh,"mIU/L",st,"طبيعي 0.4–4.5",st==="ok"?"طبيعي.":"خارج النطاق — راجع الغدد الصماء.");if(st!=="ok")flags.thyroid=true;}
+  // inbody
+  if(m.bf!=null){const th=s.gender==="m"?[20,25]:[30,35];const st=m.bf<=th[0]?"ok":m.bf<=th[1]?"warn":"bad";push("inbody","نسبة الدهون",m.bf,"%",st,s.gender==="m"?"صحي ≤ 20":"صحي ≤ 30",st==="ok"?"ضمن الصحي.":"أعلى من المرغوب — هدف الخطة إنقاصها.");if(st!=="ok")flags.highBF=true;}
+  if(m.vfat!=null){const st=m.vfat<=9?"ok":m.vfat<=14?"warn":"bad";push("inbody","دهون حشوية",m.vfat,"Level",st,"طبيعي ≤ 9",st==="ok"?"صحية.":"مرتفعة — الأخطر على القلب، الأولوية لخفضها.");if(st!=="ok")flags.visceral=true;}
+  if(m.smm!=null)push("inbody","كتلة عضلية",m.smm,"كجم","ok","—","حافظ عليها بالبروتين والمقاومة.");
+  if(m.waist!=null){const hi=s.gender==="m"?102:88;const st=m.waist<hi?"ok":"warn";push("inbody","محيط الخصر",m.waist,"سم",st,`مرغوب < ${hi}`,st==="ok"?"ضمن الصحي.":"مرتفع — مؤشر لدهون البطن.");if(st!=="ok")flags.waist=true;}
+  return {items,flags};
+}
+function adaptationList(flags){
+  const g=[];
+  if(flags.kidneySevere)g.push("⚠️ <b>الكلى:</b> بسبب انخفاض الترشيح، خُفِّض البروتين إلى ~0.8 جم/كجم لحماية الكلى. <b>لا ترفعه</b> إلا بموافقة طبيب الكلى.");
+  else if(flags.kidney)g.push("🧪 <b>الكلى:</b> أبقينا البروتين معتدلًا وزدنا شرب الماء. تابع وظائف الكلى دوريًا مع طبيبك.");
+  if(flags.diabetes||flags.prediab)g.push("🩸 <b>السكر:</b> قلّلنا النشويات المكررة وركّزنا على الحبوب الكاملة والألياف والبروتين لتثبيت السكر. إذا كنت تأخذ أدوية سكر، <b>نسّق العجز الحراري مع طبيبك</b> لتفادي الهبوط.");
+  if(flags.liver)g.push("🫀 <b>دهون الكبد:</b> إنقاص الوزن هو العلاج الأقوى — قلّلنا السكر والفركتوز والمقليات وزدنا الألياف وأوميجا-3.");
+  if(flags.tg||flags.chol||flags.ldl)g.push("🧈 <b>دهون الدم:</b> قلّلنا الدهون المشبعة والسكريات، وزدنا الشوفان والبقول والأسماك والمكسرات (ألياف وأوميجا-3).");
+  if(flags.hdl)g.push("🏃 <b>HDL المنخفض:</b> التمارين الهوائية المنتظمة وزيت الزيتون والمكسرات ترفعه تدريجيًا.");
+  if(flags.bp)g.push("🧂 <b>الضغط:</b> نمط DASH — قلّل الصوديوم والأطعمة المصنّعة، وأكثِر البوتاسيوم (خضار وفاكهة).");
+  if(flags.uric)g.push("💧 <b>حمض اليوريك:</b> رطّب جيدًا وقلّل اللحوم الحمراء والأعضاء والمشروبات المحلاة.");
+  if(flags.visceral)g.push("🔥 <b>الدهون الحشوية:</b> الأولوية لخسارة الدهون + كارديو منتظم — تنخفض هذه الدهون بسرعة مع العجز الحراري.");
+  if(flags.vitd)g.push("☀️ <b>فيتامين د:</b> تعرّض للشمس 15–20 دقيقة، وناقش مكمّلًا مناسبًا مع طبيبك.");
+  if(flags.anemia)g.push("🥩 <b>الهيموجلوبين:</b> أضف مصادر الحديد (بقول، كبد، سبانخ) مع فيتامين C لتحسين الامتصاص.");
+  if(flags.thyroid)g.push("🦋 <b>الغدة الدرقية:</b> قد تؤثر على أيضك ووزنك — تابعها مع طبيب الغدد قبل أي خطة صارمة.");
+  return g;
+}
+
+/* ============ Calculations ============ */
+function calc(flags){
+  const s=state;
+  let bmr = med.bmrm ? med.bmrm : Math.round(10*s.weight+6.25*s.height-5*s.age+(s.gender==="m"?5:-161));
+  const tdee=Math.round(bmr*s.activity);
+  const diff=s.target-s.weight;
+  const goal=Math.abs(diff)<1?"maintain":(diff<0?"lose":"gain");
+  const pace=goal==="maintain"?0:s.pace;
+  const delta=Math.round(pace*7700/7);
+  let kcal=goal==="lose"?tdee-delta:goal==="gain"?tdee+delta:tdee;
+  const floor=s.gender==="m"?1500:1200;let floored=false;
+  if(kcal<floor){kcal=floor;floored=true;}
+  // protein: prefer LBM if body fat known
+  let protein;
+  if(med.bf!=null){const lbm=s.weight*(1-med.bf/100);protein=Math.round(lbm*(goal==="gain"?2.4:2.6));}
+  else{const pKg=goal==="lose"?s.target:s.weight;protein=Math.round((goal==="gain"?1.8:2.0)*pKg);}
+  let proteinCapped=false;
+  if(flags.kidneySevere){const cap=Math.round(0.8*s.weight);if(protein>cap){protein=cap;proteinCapped=true;}}
+  else if(flags.kidney){const cap=Math.round(1.0*s.weight);if(protein>cap){protein=cap;proteinCapped=true;}}
+  const metabolic=flags.diabetes||flags.prediab||flags.liver||flags.tg;
+  let fatPct=metabolic?0.33:0.27;
+  let fat=Math.round(kcal*fatPct/9), carbs=Math.round((kcal-protein*4-fat*9)/4);
+  if(carbs<40){fat=Math.max(Math.round(0.6*s.weight),fat-Math.ceil((40-carbs)*4/9));carbs=Math.round((kcal-protein*4-fat*9)/4);}
+  const hM=s.height/100, bmi=+(s.weight/(hM*hM)).toFixed(1), bmiT=+(s.target/(hM*hM)).toFixed(1);
+  const healthyMin=+(18.5*hM*hM).toFixed(1), healthyMax=+(24.9*hM*hM).toFixed(1);
+  const weeks=goal==="maintain"?0:Math.ceil(Math.abs(diff)/pace);
+  const eta=new Date();eta.setDate(eta.getDate()+weeks*7);
+  const water=+Math.max(1.8,s.weight*0.035).toFixed(1);
+  const steps=goal==="lose"?"8–10 آلاف":goal==="gain"?"6–8 آلاف":"7–9 آلاف";
+  const sleepMin=((toMin(s.wake)-toMin(s.bed))+1440)%1440;
+  return {bmr,tdee,kcal,goal,diff,delta,floored,protein,fat,carbs,bmi,bmiT,healthyMin,healthyMax,weeks,eta,water,steps,sleepMin,metabolic,proteinCapped,usedMeasuredBMR:!!med.bmrm};
+}
+function toMin(t){const[h,m]=t.split(":").map(Number);return h*60+m;}
+function fmtT(min){min=((min%1440)+1440)%1440;let h=Math.floor(min/60),m=min%60;const p=h<12?"ص":"م";let h12=h%12;if(h12===0)h12=12;return `${h12}:${String(m).padStart(2,"0")} ${p}`;}
+function fmtDate(d){return d.toLocaleDateString("ar-EG",{day:"numeric",month:"long",year:"numeric"});}
+
+/* ============ Food DB (per 100g, cooked/edible) ============
+   القيم مستمدة من جداول التركيب الغذائي القياسية (USDA FoodData Central وما يعادلها). */
+const MACRO={
+ egg:{ar:"بيض",k:143,p:12.5,c:1.1,f:9.9,tag:"veg",t:1},ful:{ar:"فول مدمس",k:110,p:7.6,c:15,f:0.5,tag:"veg",t:1},lentil:{ar:"عدس مطبوخ",k:116,p:9,c:20,f:0.4,tag:"veg",t:1},
+ chickpea:{ar:"حمص مطبوخ",k:164,p:8.9,c:27,f:2.6,tag:"veg",t:1},whitebean:{ar:"فاصوليا بيضاء",k:139,p:9.7,c:25,f:0.5,tag:"veg",t:1},
+ tuna:{ar:"تونة (بالماء)",k:116,p:26,c:0,f:1,tag:"meat",t:2},sardine:{ar:"سردين",k:208,p:25,c:0,f:11,tag:"meat",t:2},
+ chicken:{ar:"صدر دجاج مشوي",k:165,p:31,c:0,f:3.6,tag:"meat",t:2},chickenbone:{ar:"دجاج مطهو",k:190,p:27,c:0,f:9,tag:"meat",t:2},
+ whitefish:{ar:"سمك أبيض مشوي",k:128,p:26,c:0,f:2.7,tag:"meat",t:2},nilefish:{ar:"سمك نيلي مشوي",k:110,p:23,c:0,f:2,tag:"meat",t:2},
+ liver:{ar:"كبدة",k:175,p:26,c:4,f:5,tag:"meat",t:2},kofta:{ar:"كفتة لحم",k:250,p:18,c:3,f:18,tag:"meat",t:2},
+ beef:{ar:"لحم بقري قليل الدهن",k:187,p:26,c:0,f:9,tag:"meat",t:3},steak:{ar:"ستيك",k:250,p:26,c:0,f:16,tag:"meat",t:3},
+ lamb:{ar:"لحم ضأن",k:258,p:25,c:0,f:17,tag:"meat",t:3},shrimp:{ar:"جمبري",k:99,p:24,c:0.2,f:0.3,tag:"meat",t:3},salmon:{ar:"سلمون",k:208,p:20,c:0,f:13,tag:"meat",t:3},
+ milk:{ar:"حليب",k:60,p:3.3,c:4.8,f:3.3,tag:"dairy",t:1},yogurt:{ar:"زبادي/روب",k:61,p:3.5,c:4.7,f:3.3,tag:"dairy",t:1},greekyog:{ar:"زبادي يوناني",k:73,p:10,c:4,f:2,tag:"dairy",t:2},
+ qariesh:{ar:"جبن قريش",k:98,p:11,c:3,f:4.3,tag:"dairy",t:1},labneh:{ar:"لبنة",k:174,p:8,c:6,f:13,tag:"dairy",t:2},feta:{ar:"جبن أبيض",k:264,p:14,c:4,f:21,tag:"dairy",t:2},haloumi:{ar:"جبن حلوم",k:321,p:22,c:2,f:26,tag:"dairy",t:2},
+ pb:{ar:"زبدة فول سوداني",k:588,p:25,c:20,f:50,tag:"veg",t:2},nuts:{ar:"مكسرات",k:600,p:20,c:21,f:54,tag:"veg",t:2},tahini:{ar:"طحينة",k:595,p:17,c:21,f:54,tag:"veg",t:2},almond:{ar:"لوز",k:579,p:21,c:22,f:50,tag:"veg",t:2},
+ rice:{ar:"أرز أبيض مطبوخ",k:130,p:2.7,c:28,f:0.3,tag:"veg",t:1},brice:{ar:"أرز بني مطبوخ",k:123,p:2.7,c:26,f:1,tag:"veg",t:1},
+ baladi:{ar:"عيش بلدي",k:265,p:9,c:53,f:1.6,tag:"veg",t:1},bbread:{ar:"خبز أسمر (قمح كامل)",k:247,p:10,c:48,f:3.5,tag:"veg",t:1},arabread:{ar:"خبز عربي",k:275,p:8,c:56,f:1.2,tag:"veg",t:1},
+ bulgur:{ar:"برغل مطبوخ",k:83,p:3,c:19,f:0.2,tag:"veg",t:1},couscous:{ar:"كسكس مطبوخ",k:112,p:3.8,c:23,f:0.2,tag:"veg",t:1},freekeh:{ar:"فريك مطبوخ",k:110,p:4,c:22,f:0.7,tag:"veg",t:1},
+ potato:{ar:"بطاطس مسلوقة",k:86,p:1.6,c:20,f:0.1,tag:"veg",t:1},spotato:{ar:"بطاطا حلوة",k:86,p:2,c:20,f:0.1,tag:"veg",t:1},pasta:{ar:"مكرونة مطبوخة",k:150,p:6,c:30,f:1,tag:"veg",t:1},
+ oats:{ar:"شوفان",k:379,p:13,c:67,f:7,tag:"veg",t:1},kisra:{ar:"كسرة/خبز ذرة",k:250,p:6,c:50,f:1.5,tag:"veg",t:1},aseeda:{ar:"عصيدة",k:110,p:3,c:24,f:0.4,tag:"veg",t:1},bazin:{ar:"بازين شعير",k:123,p:3.5,c:26,f:0.5,tag:"veg",t:1},maize:{ar:"ذرة",k:96,p:3.4,c:21,f:1.5,tag:"veg",t:1},
+ salad:{ar:"سلطة خضراء",k:22,p:1.2,c:4,f:0.2,tag:"veg",t:1},mixveg:{ar:"خضار مشكّل",k:40,p:2,c:8,f:0.3,tag:"veg",t:1},molokhia:{ar:"ملوخية",k:60,p:4,c:6,f:0.9,tag:"veg",t:1},okra:{ar:"بامية",k:45,p:1.8,c:7,f:0.2,tag:"veg",t:1},
+ tomato:{ar:"طماطم",k:18,p:0.9,c:3.9,f:0.2,tag:"veg",t:1},spinach:{ar:"سبانخ",k:23,p:2.9,c:3.6,f:0.4,tag:"veg",t:1},zaalouk:{ar:"باذنجان مطبوخ",k:60,p:1,c:6,f:3,tag:"veg",t:1},
+ oil:{ar:"زيت زيتون",k:884,p:0,c:0,f:100,tag:"veg",t:1},olives:{ar:"زيتون",k:115,p:0.8,c:6,f:11,tag:"veg",t:1},avocado:{ar:"أفوكادو",k:160,p:2,c:9,f:15,tag:"veg",t:2},honey:{ar:"عسل",k:304,p:0,c:82,f:0,tag:"veg",t:1},harissa:{ar:"هريسة",k:70,p:3,c:9,f:2,tag:"veg",t:1},halawa:{ar:"حلاوة طحينية",k:500,p:12,c:50,f:30,tag:"veg",t:1},
+ dates:{ar:"تمر",k:282,p:2.5,c:75,f:0.4,tag:"veg",t:1},banana:{ar:"موز",k:89,p:1.1,c:23,f:0.3,tag:"veg",t:1},fruit:{ar:"فاكهة موسمية",k:60,p:0.6,c:14,f:0.2,tag:"veg",t:1}
+};
+/* dish = {n:name, t:tier, i:[[key,grams]]} ; tier 1=اقتصادي 2=متوسط 3=مرتفع */
+/* dish = {n:name, t:tier(1 اقتصادي / 2 متوسط / 3 مرتفع), i:[[key,grams]]}
+   أطباق فعلية من كل مطبخ، متدرّجة التكلفة. الفول أكلة فطار اقتصادية ولا يُستخدم كبروتين عام. */
+const COUNTRIES={
+ eg:{name:"مصر",flag:"🇪🇬",
+  dialect:{hi:"يا فندم",enc:"يوم بيوم هتوصل لهدفك، المهم متبطلش 💪",water:"اشرب مية كتير على مدار اليوم",sugar:"خفّف السكر في الشاي والقهوة",
+   swap:"بدّل زي ما تحب بين خيارات الوجبة، والأصناف المتشابهة (فراخ↔سمك↔تونة، رز↔مكرونة↔بطاطس) بنفس السعرات تقريبًا",
+   mh:{breakfast:"فطارك في أول ساعة بعد ما تصحى",lunch:"دي أكبر وجبة: بروتين + نشويات + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"سناك صغير يسدّ نفسك بين الوجبات"}},
+  tips:["قلّل العيش الأبيض واستبدله بالبلدي/الأسمر","المخللات والمقليات تزوّد الصوديوم والدهون—قلّلها","الشاي بالسكر عدو الرجيم؛ جرّبه سادة","الطبخ المشوي أو بالفرن أوفر بالسعرات من القلي"],
+  pools:{
+   breakfast:[{n:"فول مدمس بالزيت والكمون",t:1,i:[["ful",250],["baladi",90],["oil",8],["salad",100]]},{n:"فول بالطحينة",t:1,i:[["ful",220],["tahini",15],["baladi",90],["salad",80]]},{n:"طعمية بلدي (فرن) وسلطة",t:1,i:[["chickpea",180],["baladi",80],["salad",120],["tahini",10]]},{n:"بيض مسلوق بالعيش البلدي",t:1,i:[["egg",150],["baladi",90],["tomato",100]]},{n:"جبنة قريش بالطماطم والخبز",t:1,i:[["qariesh",150],["baladi",80],["tomato",100],["oil",5]]},{n:"شوفان باللبن والموز والعسل",t:1,i:[["oats",60],["milk",200],["banana",100],["honey",8]]},{n:"شكشوكة بيض بالطماطم",t:2,i:[["egg",150],["tomato",120],["baladi",70],["oil",6]]},{n:"فول باللحمة المفرومة",t:2,i:[["ful",180],["beef",60],["baladi",80],["oil",5]]},{n:"زبادي يوناني بالجرانولا والفواكه",t:2,i:[["greekyog",200],["oats",40],["fruit",120],["honey",6]]},{n:"بيض بالبسطرمة والخبز",t:3,i:[["egg",120],["beef",60],["baladi",80]]}],
+   lunch:[{n:"كشري مصري",t:1,i:[["rice",150],["pasta",80],["lentil",120],["chickpea",70],["oil",8]]},{n:"عدس أصفر بالأرز",t:1,i:[["lentil",230],["rice",150],["salad",120],["oil",6]]},{n:"ملوخية بالأرز (نباتي)",t:1,i:[["molokhia",200],["rice",180],["salad",100],["oil",6]]},{n:"محشي كرنب/ورق عنب بالأرز",t:1,i:[["rice",180],["mixveg",150],["tomato",80],["oil",8]]},{n:"بطاطس بالخضار والصلصة",t:1,i:[["potato",220],["mixveg",150],["tomato",100],["oil",7]]},{n:"فراخ مشوية بالأرز والخضار",t:2,i:[["chicken",150],["rice",200],["mixveg",150],["oil",5]]},{n:"ملوخية بالفراخ والأرز",t:2,i:[["molokhia",180],["chickenbone",140],["rice",160]]},{n:"سمك بلطي مشوي بالأرز الصيادية",t:2,i:[["nilefish",200],["rice",200],["salad",120],["oil",5]]},{n:"كبدة إسكندراني بالعيش",t:2,i:[["liver",150],["baladi",90],["salad",120],["oil",5]]},{n:"كفتة مشوية بالأرز",t:2,i:[["kofta",160],["rice",180],["salad",120]]},{n:"طاجن لحمة ضاني بالخضار",t:3,i:[["lamb",170],["mixveg",180],["potato",120],["oil",5]]},{n:"جمبري بالأرز الصيادية",t:3,i:[["shrimp",160],["rice",200],["mixveg",120],["oil",5]]}],
+   dinner:[{n:"عيش بجبنة قريش وخيار وطماطم",t:1,i:[["qariesh",180],["bbread",60],["tomato",120],["salad",80]]},{n:"فول خفيف بالليمون",t:1,i:[["ful",200],["bbread",60],["salad",120],["oil",5]]},{n:"زبادي بالخيار والنعناع وخبز",t:1,i:[["yogurt",220],["salad",120],["bbread",50]]},{n:"شوربة عدس بالخبز",t:1,i:[["lentil",180],["bbread",60],["salad",100]]},{n:"بطاطس بورية بالفرن",t:1,i:[["potato",200],["mixveg",120],["oil",6]]},{n:"أومليت بيض بالخضار",t:2,i:[["egg",150],["mixveg",120],["bbread",60],["oil",6]]},{n:"تونة بالخبز الأسمر والسلطة",t:2,i:[["tuna",100],["bbread",60],["salad",150],["oil",5]]},{n:"سلطة فراخ مشوية",t:2,i:[["chicken",120],["salad",200],["bbread",50],["oil",6]]},{n:"جبنة بيضاء بالطماطم والزيتون",t:2,i:[["feta",80],["bbread",60],["tomato",120],["olives",20]]},{n:"سندويتش تونة بالخبز الأسمر",t:2,i:[["tuna",90],["bbread",70],["salad",80]]}],
+   snack:[{n:"تمر باللبن",t:1,i:[["dates",40],["milk",200]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"عيش أسمر بجبنة قريش",t:1,i:[["qariesh",120],["bbread",40]]},{n:"موز",t:1,i:[["banana",160]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"زبادي بالفواكه والعسل",t:2,i:[["yogurt",170],["fruit",100],["honey",6]]},{n:"حفنة مكسرات وتمر",t:2,i:[["nuts",20],["dates",30]]},{n:"موز بزبدة الفول السوداني",t:2,i:[["banana",120],["pb",15]]},{n:"تمر باللوز",t:2,i:[["dates",40],["almond",15]]}]}},
+ sa:{name:"السعودية",flag:"🇸🇦",
+  dialect:{hi:"هلا والله",enc:"خطوة خطوة توصل لهدفك، وترى الاستمرارية أهم شي",water:"لا تنسى الماي على طول اليوم",sugar:"قلّل السكر في الشاهي والقهوة",
+   swap:"بدّل على كيفك بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔سمك↔لحم، رز↔جريش↔برغل) بنفس السعرات",mh:{breakfast:"ريوقك بأول ساعة بعد ما تصحى",lunch:"أكبر وجبة: بروتين + رز/جريش + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["قلّل الكبسة الدسمة والسمن؛ خفّف الزيت في الطبخ","المشروبات المحلاة والعصائر ترفع السعرات بسرعة","التمر مفيد لكن بحساب—3 حبات تكفي للسناك","أكثِر من المشي، خصوصًا في الأجواء المعتدلة مساءً"],
+  pools:{
+   breakfast:[{n:"فول وتميس",t:1,i:[["ful",220],["arabread",90],["oil",7]]},{n:"جبن قريش وخبز وزيتون",t:1,i:[["qariesh",150],["arabread",80],["olives",20]]},{n:"زبادي بالشوفان والتمر",t:1,i:[["yogurt",220],["oats",50],["dates",30]]},{n:"مسابيح شوفان بالعسل والحليب",t:1,i:[["oats",60],["milk",180],["honey",10]]},{n:"شكشوكة بيض",t:2,i:[["egg",150],["tomato",120],["arabread",70],["oil",6]]},{n:"بيض عيون بالطماطم",t:2,i:[["egg",150],["tomato",100],["arabread",70],["oil",6]]},{n:"فول بالجبن",t:2,i:[["ful",180],["feta",40],["arabread",80]]},{n:"خبز بالجبن الحلوم المشوي",t:2,i:[["haloumi",80],["arabread",90],["tomato",80]]},{n:"تمر بالقشطة/الزبادي اليوناني",t:2,i:[["greekyog",150],["dates",40]]},{n:"خبز أسمر بالأفوكادو والبيض",t:3,i:[["egg",120],["avocado",80],["arabread",70]]}],
+   lunch:[{n:"مطازيز/قرصان بالخضار (نباتي)",t:1,i:[["arabread",120],["mixveg",180],["tomato",100],["oil",6]]},{n:"عدس بالأرز (نباتي)",t:1,i:[["lentil",250],["rice",150],["salad",120]]},{n:"مرقوق خضار",t:1,i:[["arabread",110],["mixveg",180],["tomato",90],["oil",6]]},{n:"سليق خضار بالأرز",t:1,i:[["rice",200],["mixveg",160],["milk",80],["oil",5]]},{n:"كبسة دجاج",t:2,i:[["chicken",150],["rice",200],["mixveg",120],["oil",6]]},{n:"مندي دجاج",t:2,i:[["chickenbone",160],["rice",200],["salad",120]]},{n:"جريش باللحم",t:2,i:[["bulgur",220],["beef",110],["mixveg",120]]},{n:"هريس باللحم",t:2,i:[["freekeh",200],["beef",110],["oil",5]]},{n:"سيادية سمك",t:2,i:[["whitefish",200],["rice",200],["salad",120],["oil",5]]},{n:"كبسة لحم",t:3,i:[["lamb",170],["rice",200],["salad",120],["oil",5]]},{n:"مندي لحم",t:3,i:[["lamb",170],["rice",200],["salad",120]]},{n:"كبسة ربيان (جمبري)",t:3,i:[["shrimp",160],["rice",200],["mixveg",120],["oil",5]]}],
+   dinner:[{n:"شوربة عدس وخبز",t:1,i:[["lentil",200],["arabread",60],["salad",100]]},{n:"بيض مسلوق بالخبز والسلطة",t:1,i:[["egg",120],["arabread",60],["salad",120]]},{n:"زبادي وخيار وخبز",t:1,i:[["yogurt",220],["salad",120],["arabread",50]]},{n:"شوربة خضار بالشوفان",t:1,i:[["mixveg",180],["oats",40],["arabread",50]]},{n:"فتة خضار خفيفة",t:1,i:[["arabread",70],["mixveg",150],["yogurt",120]]},{n:"بيض بالخضار وخبز",t:2,i:[["egg",150],["mixveg",120],["arabread",60],["oil",5]]},{n:"تونة بالسلطة والخبز",t:2,i:[["tuna",100],["arabread",60],["salad",150],["oil",5]]},{n:"سلطة دجاج مشوي",t:2,i:[["chicken",120],["salad",200],["arabread",50],["oil",6]]},{n:"جبن حلوم مشوي بالخضار",t:2,i:[["haloumi",90],["salad",150],["arabread",50]]},{n:"خبز بالجبن الأبيض والطماطم",t:2,i:[["feta",80],["arabread",60],["tomato",120],["olives",15]]}],
+   snack:[{n:"تمر ولبن",t:1,i:[["dates",40],["milk",200]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"خبز بالجبن",t:1,i:[["qariesh",100],["arabread",40]]},{n:"موز",t:1,i:[["banana",160]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"تمر ولوز",t:2,i:[["dates",40],["almond",15]]},{n:"زبادي بالفواكه",t:2,i:[["yogurt",170],["fruit",120]]},{n:"مكسرات مشكلة",t:2,i:[["nuts",25]]},{n:"تمر بزبدة الفول السوداني",t:2,i:[["dates",40],["pb",15]]}]}},
+ ye:{name:"اليمن",flag:"🇾🇪",
+  dialect:{hi:"مرحبا بك",enc:"خطوة خطوة توصل لهدفك، وثابر ولا تستسلم",water:"لا تنسَ تشرب ماء كفاية",sugar:"قلّل السكر في الشاهي",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔سمك↔لحم، رز↔برغل) بنفس السعرات",mh:{breakfast:"فطورك في أول ساعة بعد الاستيقاظ",lunch:"أكبر وجبة: بروتين + رز + خضار",dinner:"عشاء خفيف قبل النوم بساعتين ونصف",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["السلتة والحنيذ دسمة—خفّف الزيت والسمن","الخبز الأبيض بكميات كبيرة يرفع السعرات","التمر واللبن سناك جيد لكن باعتدال","أكثِر من الخضار الطازج مع كل وجبة"],
+  pools:{
+   breakfast:[{n:"فول يمني بالزيت",t:1,i:[["ful",220],["arabread",80],["oil",7]]},{n:"معصوب (موز وخبز وعسل)",t:1,i:[["banana",150],["arabread",70],["honey",10]]},{n:"شفوت (لبن وخبز وأعشاب)",t:1,i:[["yogurt",220],["arabread",60],["salad",80]]},{n:"زبادي بالشوفان والموز",t:1,i:[["yogurt",200],["oats",50],["banana",80]]},{n:"خبز التنور بالعسل",t:1,i:[["arabread",90],["honey",10],["oil",6]]},{n:"بيض بالطماطم والحلبة",t:2,i:[["egg",150],["tomato",120],["arabread",70],["oil",6]]},{n:"فول بالبيض",t:2,i:[["ful",180],["egg",80],["arabread",80]]},{n:"جبن وخبز وعسل",t:2,i:[["feta",60],["arabread",80],["honey",8]]},{n:"كبدة بالخبز",t:2,i:[["liver",120],["arabread",80],["tomato",80]]},{n:"فتة تمر بالسمن",t:2,i:[["arabread",80],["dates",40],["oil",6]]}],
+   lunch:[{n:"عدس بالأرز (نباتي)",t:1,i:[["lentil",250],["rice",150],["salad",120]]},{n:"فاصوليا بالأرز (نباتي)",t:1,i:[["whitebean",220],["rice",160],["salad",120],["oil",6]]},{n:"مرق خضار بالخبز",t:1,i:[["mixveg",200],["arabread",90],["tomato",100],["oil",6]]},{n:"فحسة لحم",t:2,i:[["beef",120],["arabread",100],["mixveg",150]]},{n:"سلتة باللحم",t:2,i:[["beef",120],["bulgur",180],["mixveg",150],["oil",6]]},{n:"زربيان دجاج",t:2,i:[["chicken",150],["rice",200],["mixveg",120],["oil",5]]},{n:"مندي دجاج",t:2,i:[["chickenbone",160],["rice",200],["salad",120]]},{n:"سمك مشوي بالأرز (ساحلي)",t:2,i:[["whitefish",200],["rice",180],["salad",120],["oil",5]]},{n:"حنيذ لحم بالأرز",t:3,i:[["lamb",170],["rice",200],["salad",120]]},{n:"زربيان لحم",t:3,i:[["lamb",160],["rice",200],["mixveg",120]]},{n:"مضبي دجاج",t:2,i:[["chickenbone",160],["rice",190],["salad",120]]}],
+   dinner:[{n:"شوربة حلبة/عدس وخبز",t:1,i:[["lentil",200],["arabread",60],["salad",100]]},{n:"فحسة خضار وخبز",t:1,i:[["mixveg",180],["arabread",70],["oil",6]]},{n:"شفوت خفيف",t:1,i:[["yogurt",200],["arabread",50],["salad",80]]},{n:"بطاطس بالخضار وخبز",t:1,i:[["potato",200],["mixveg",120],["arabread",60],["oil",6]]},{n:"زبادي بالخيار وخبز",t:1,i:[["yogurt",220],["salad",120],["arabread",50]]},{n:"بيض بالخضار وخبز",t:2,i:[["egg",150],["mixveg",120],["arabread",60],["oil",5]]},{n:"تونة بالخبز والسلطة",t:2,i:[["tuna",100],["arabread",60],["salad",150],["oil",5]]},{n:"سمك صغير بالفرن وسلطة",t:2,i:[["whitefish",150],["salad",150],["arabread",60]]},{n:"خبز بالجبن والطماطم",t:2,i:[["feta",70],["arabread",60],["tomato",120]]},{n:"معصوب خفيف",t:1,i:[["banana",120],["arabread",60]]}],
+   snack:[{n:"تمر ولبن",t:1,i:[["dates",40],["milk",200]]},{n:"موز",t:1,i:[["banana",160]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"خبز بالعسل",t:1,i:[["arabread",50],["honey",12]]},{n:"زبادي بالموز",t:1,i:[["yogurt",170],["banana",80]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"تمر ومكسرات",t:2,i:[["dates",30],["nuts",20]]},{n:"مكسرات",t:2,i:[["nuts",25]]},{n:"تمر باللوز",t:2,i:[["dates",40],["almond",15]]}]}},
+ sy:{name:"سوريا",flag:"🇸🇾",
+  dialect:{hi:"أهلين",enc:"شوي شوي بتوصل لهدفك، الأهم ما توقف",water:"ما تنسى تشرب مي عالطول",sugar:"خفّف السكر بالشاي والقهوة",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔سمك↔لحم، برغل↔رز) بنفس السعرات",mh:{breakfast:"فطورك بأول ساعة بعد ما تفيق",lunch:"أكبر وجبة: بروتين + برغل/رز + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["المقالي والسمنة بالأكلات الشامية عالية—فضّل الشوي","البرغل أوفر من الرز بالسعرات وأغنى بالألياف","الحلويات الشامية مركّزة بالسكر—خصّها للمناسبات","أكثِر من الخضار والتبولة مع الوجبات"],
+  pools:{
+   breakfast:[{n:"لبنة بزيت الزيتون والزيتون وخبز",t:1,i:[["labneh",120],["arabread",80],["olives",25],["oil",5]]},{n:"فول بالليمون والثوم",t:1,i:[["ful",200],["arabread",70],["oil",6]]},{n:"مسبحة حمص بالطحينة وخبز",t:1,i:[["chickpea",200],["tahini",20],["arabread",70],["oil",5]]},{n:"منقوشة زعتر (فرن)",t:1,i:[["arabread",110],["oil",10],["tomato",60]]},{n:"لبنة بالخيار والنعناع",t:1,i:[["labneh",120],["salad",100],["arabread",70]]},{n:"شوفان بالحليب والجوز",t:2,i:[["oats",60],["milk",200],["nuts",15]]},{n:"بيض بالخبز والزعتر",t:2,i:[["egg",150],["arabread",80],["oil",6]]},{n:"منقوشة جبنة",t:2,i:[["arabread",100],["feta",60],["tomato",60]]},{n:"فتة حمص باللبن",t:2,i:[["chickpea",180],["yogurt",120],["arabread",70],["oil",5]]},{n:"بيض بالسجق (مقانق)",t:3,i:[["egg",120],["beef",60],["arabread",70]]}],
+   lunch:[{n:"مجدرة عدس وبرغل (نباتي)",t:1,i:[["lentil",200],["bulgur",150],["salad",150],["oil",8]]},{n:"مجدرة عدس ورز (نباتي)",t:1,i:[["lentil",220],["rice",150],["salad",120],["oil",6]]},{n:"مسقعة بطاطس وباذنجان",t:1,i:[["zaalouk",180],["potato",150],["tomato",100],["oil",8]]},{n:"يخنة فاصوليا بالأرز",t:1,i:[["whitebean",200],["rice",160],["tomato",100],["oil",6]]},{n:"محاشي كوسا وباذنجان بالأرز",t:1,i:[["rice",180],["mixveg",170],["tomato",90],["oil",7]]},{n:"شيش طاووق بالأرز",t:2,i:[["chicken",150],["rice",180],["salad",150],["oil",5]]},{n:"كبة مقلية بالفرن باللبن",t:2,i:[["bulgur",150],["beef",110],["mixveg",100]]},{n:"ملوخية بالدجاج والأرز",t:2,i:[["molokhia",180],["chickenbone",140],["rice",160]]},{n:"سمك مشوي بالأرز",t:2,i:[["whitefish",200],["rice",180],["salad",120],["oil",5]]},{n:"مشاوي لحم مشكّل",t:3,i:[["lamb",170],["mixveg",180],["arabread",70],["oil",5]]},{n:"كباب حلبي",t:3,i:[["kofta",170],["arabread",80],["salad",150],["tomato",80]]}],
+   dinner:[{n:"تبولة وزبادي",t:1,i:[["bulgur",70],["salad",200],["yogurt",150],["oil",8]]},{n:"فتوش وخبز محمّص",t:1,i:[["salad",220],["arabread",70],["oil",8]]},{n:"لبنة وخضار وخبز",t:1,i:[["labneh",150],["arabread",60],["salad",150],["oil",5]]},{n:"حمص بالخبز",t:1,i:[["chickpea",200],["arabread",70],["tahini",10]]},{n:"شوربة عدس بالكمون وخبز",t:1,i:[["lentil",200],["arabread",60],["salad",80]]},{n:"بيض بالخضار وخبز",t:2,i:[["egg",150],["mixveg",120],["arabread",60],["oil",5]]},{n:"تونة بالسلطة والخبز",t:2,i:[["tuna",100],["arabread",60],["salad",150],["oil",5]]},{n:"سلطة دجاج مشوي",t:2,i:[["chicken",120],["salad",200],["arabread",50],["oil",6]]},{n:"جبنة بيضاء بالبندورة والزيتون",t:2,i:[["feta",80],["arabread",60],["tomato",120],["olives",20]]},{n:"مسقعة باردة وخبز",t:1,i:[["zaalouk",180],["arabread",60],["oil",6]]}],
+   snack:[{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"لبنة بالخبز",t:1,i:[["labneh",100],["arabread",40]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"خيار وجزر بالحمص",t:1,i:[["chickpea",120],["salad",120]]},{n:"موز",t:1,i:[["banana",160]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"تمر بالجوز",t:2,i:[["dates",30],["nuts",20]]},{n:"زبادي بالفواكه",t:2,i:[["yogurt",170],["fruit",120]]},{n:"مكسرات",t:2,i:[["nuts",25]]},{n:"تمر باللوز",t:2,i:[["dates",40],["almond",15]]}]}},
+ sd:{name:"السودان",flag:"🇸🇩",
+  dialect:{hi:"سلام",enc:"يوم بعد يوم بتقرب من هدفك، بس واصل",water:"ما تنسى تشرب موية كتير",sugar:"قلّل السكر في الجبنة والشاي",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔سمك↔لحم، رز↔كسرة) بنفس السعرات",mh:{breakfast:"فطورك في أول ساعة بعد ما تصحى",lunch:"أكبر وجبة: بروتين + رز/كسرة + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["الفول أوفر مصدر بروتين وغني بالألياف—لكن خفّف الزيت","العصيدة والكسرة نشويات—وازنها مع بروتين وخضار","الشاي شديد الحلاوة يزيد السعرات، قلّل السكر","السمك النيلي مصدر بروتين ممتاز وقليل الدهن"],
+  pools:{
+   breakfast:[{n:"فول سوداني بالزيت والجبنة",t:1,i:[["ful",250],["kisra",80],["oil",8],["salad",80]]},{n:"فول بالطحينة (تمية)",t:1,i:[["ful",220],["tahini",15],["kisra",80]]},{n:"طعمية سودانية (فرن) وسلطة",t:1,i:[["chickpea",180],["kisra",80],["salad",120]]},{n:"عصيدة بالتمر والسمن",t:1,i:[["aseeda",200],["dates",40],["oil",6]]},{n:"روب (زبادي) بالتمر",t:1,i:[["yogurt",220],["dates",30]]},{n:"بليلة قمح باللبن",t:1,i:[["maize",150],["milk",180],["honey",8]]},{n:"بيض بالطماطم والكسرة",t:2,i:[["egg",150],["tomato",100],["kisra",80]]},{n:"فول باللحمة",t:2,i:[["ful",180],["beef",60],["kisra",80]]},{n:"جبنة بيضاء بالخبز",t:2,i:[["feta",60],["kisra",80],["tomato",80]]},{n:"كبدة بالكسرة",t:2,i:[["liver",120],["kisra",80],["salad",80]]}],
+   lunch:[{n:"عدس بالأرز (نباتي)",t:1,i:[["lentil",250],["rice",150],["salad",120]]},{n:"ملاح تقلية خضار بالكسرة (نباتي)",t:1,i:[["mixveg",200],["kisra",100],["oil",7]]},{n:"ملاح ويكة (بامية) بالكسرة (نباتي)",t:1,i:[["okra",180],["kisra",100],["tomato",80],["oil",6]]},{n:"فاصوليا بالأرز (نباتي)",t:1,i:[["whitebean",220],["rice",160],["salad",100],["oil",6]]},{n:"دجاج بالأرز",t:2,i:[["chicken",150],["rice",200],["mixveg",120],["oil",5]]},{n:"دمعة شية لحم بالطماطم والكسرة",t:2,i:[["beef",120],["kisra",100],["tomato",120],["oil",5]]},{n:"سمك نيلي مشوي بالأرز",t:2,i:[["nilefish",200],["rice",180],["salad",120],["oil",5]]},{n:"كمونية كبدة بالكسرة",t:2,i:[["liver",140],["kisra",90],["tomato",80]]},{n:"مفروكة عصيدة باللحم",t:2,i:[["aseeda",180],["beef",110],["mixveg",100]]},{n:"شية لحم ضاني وسلطة",t:3,i:[["lamb",170],["kisra",80],["salad",150],["oil",5]]}],
+   dinner:[{n:"بطاطس بالخضار والكسرة",t:1,i:[["potato",200],["mixveg",120],["kisra",60],["oil",6]]},{n:"روب بالكسرة والتمر",t:1,i:[["yogurt",220],["kisra",60],["dates",20]]},{n:"شوربة عدس بالخبز",t:1,i:[["lentil",200],["kisra",60],["salad",80]]},{n:"ملاح خضار خفيف",t:1,i:[["mixveg",180],["kisra",70],["oil",6]]},{n:"زبادي بالخيار والكسرة",t:1,i:[["yogurt",220],["salad",120],["kisra",50]]},{n:"بطاطس بالخضار",t:1,i:[["potato",200],["mixveg",120],["oil",6]]},{n:"بيض بالخضار والكسرة",t:2,i:[["egg",150],["mixveg",120],["kisra",70],["oil",5]]},{n:"تونة بالسلطة",t:2,i:[["tuna",100],["kisra",60],["salad",150],["oil",5]]},{n:"سمك صغير مشوي وسلطة",t:2,i:[["nilefish",150],["salad",150],["kisra",60]]},{n:"جبنة بالطماطم والخبز",t:2,i:[["feta",70],["kisra",70],["tomato",120]]}],
+   snack:[{n:"تمر ولبن",t:1,i:[["dates",40],["milk",200]]},{n:"روب بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"موز",t:1,i:[["banana",160]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"كسرة بالجبنة",t:1,i:[["feta",60],["kisra",50]]},{n:"فول سوداني محمّص وتمر",t:2,i:[["pb",15],["dates",30]]},{n:"تمر ومكسرات",t:2,i:[["dates",30],["nuts",20]]},{n:"زبادي بالموز",t:1,i:[["yogurt",170],["banana",80]]},{n:"تمر باللوز",t:2,i:[["dates",40],["almond",15]]}]}},
+ ly:{name:"ليبيا",flag:"🇱🇾",
+  dialect:{hi:"مرحبا بيك",enc:"شوية بشوية توصل لهدفك، بس ما تبطلش",water:"ما تنساش تشرب الما",sugar:"نقّص السكر في الشاي والقهوة",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔حوت↔لحم، كسكسي↔رز) بنفس السعرات",mh:{breakfast:"فطورك في أول ساعة بعد ما تفيق",lunch:"أكبر وجبة: بروتين + كسكسي/رز + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["الكسكسي باللحم الدسم عالي السعرات؛ خفّف اللحم والزيت","أكثِر من السمك المتوفر على الساحل—بروتين قليل الدهن","الهريسة قليلة السعرات وتضيف نكهة بدل الدهون","قلّل الخبز الأبيض وزد الخضار"],
+  pools:{
+   breakfast:[{n:"فول بزيت الزيتون",t:1,i:[["ful",220],["arabread",90],["oil",8]]},{n:"بسيسة بالتمر والزيت",t:1,i:[["oats",60],["oil",8],["dates",30]]},{n:"جبن وزيتون وخبز",t:1,i:[["qariesh",150],["arabread",80],["olives",20]]},{n:"عصيدة بالعسل",t:1,i:[["aseeda",200],["honey",10],["oil",5]]},{n:"زبادي بالشوفان والفواكه",t:1,i:[["yogurt",200],["oats",50],["fruit",100]]},{n:"شكشوكة بالبيض",t:2,i:[["egg",150],["tomato",120],["arabread",70],["oil",6]]},{n:"خبز بالتونة والهريسة",t:2,i:[["tuna",80],["arabread",90],["harissa",8],["oil",4]]},{n:"بيض بالخضار",t:2,i:[["egg",150],["mixveg",100],["arabread",70],["oil",6]]},{n:"خبز بالجبن والطماطم",t:2,i:[["feta",70],["arabread",80],["tomato",100]]},{n:"مبطن خضار خفيف",t:2,i:[["potato",150],["mixveg",120],["arabread",60],["oil",6]]}],
+   lunch:[{n:"بازين بالصلصة والخضار (نباتي)",t:1,i:[["bazin",220],["mixveg",150],["tomato",100],["oil",7]]},{n:"كسكسي بالخضار (نباتي)",t:1,i:[["couscous",220],["mixveg",180],["oil",8]]},{n:"مبكبكة/مقرونة بالخضار (نباتي)",t:1,i:[["pasta",180],["mixveg",150],["tomato",100],["oil",7]]},{n:"عدس بالخبز (نباتي)",t:1,i:[["lentil",250],["arabread",70],["salad",120]]},{n:"شربة ليبية بالدجاج والفريك",t:2,i:[["chicken",130],["freekeh",150],["mixveg",150],["oil",5]]},{n:"رز بالسمك (ساحلي)",t:2,i:[["whitefish",200],["rice",180],["salad",120],["oil",5]]},{n:"كسكسي بالدجاج",t:2,i:[["couscous",200],["chicken",140],["mixveg",150]]},{n:"مقرونة مبكبكة باللحم",t:2,i:[["pasta",180],["beef",110],["tomato",100],["oil",5]]},{n:"بازين باللحم",t:3,i:[["bazin",200],["lamb",150],["mixveg",120]]},{n:"كسكسي باللحم",t:3,i:[["couscous",200],["lamb",150],["mixveg",150]]},{n:"طاجين لحم بالبطاطس",t:3,i:[["lamb",160],["potato",180],["mixveg",120],["oil",5]]}],
+   dinner:[{n:"شربة خضار خفيفة وخبز",t:1,i:[["mixveg",180],["arabread",60],["tomato",80],["oil",6]]},{n:"سلطة تونة خفيفة بالخبز",t:2,i:[["tuna",90],["arabread",60],["salad",150],["oil",5]]},{n:"عدس شوربة وخبز",t:1,i:[["lentil",200],["arabread",60],["salad",80]]},{n:"زبادي وفواكه",t:1,i:[["yogurt",220],["fruit",150]]},{n:"خضار بالفرن",t:1,i:[["mixveg",200],["potato",120],["oil",6]]},{n:"خبز بالجبن الأبيض",t:1,i:[["qariesh",120],["arabread",50]]},{n:"تونة بالهريسة وخبز وسلطة",t:2,i:[["tuna",100],["arabread",60],["salad",150],["harissa",10],["oil",4]]},{n:"بيض بالخضار",t:2,i:[["egg",150],["mixveg",120],["arabread",60],["oil",5]]},{n:"سلطة تونة وبطاطس",t:2,i:[["tuna",90],["potato",150],["salad",120],["oil",5]]},{n:"جبن بالطماطم والزيتون",t:2,i:[["feta",80],["arabread",60],["tomato",120],["olives",15]]}],
+   snack:[{n:"تمر ولبن",t:1,i:[["dates",40],["milk",200]]},{n:"فاكهة وزبادي",t:1,i:[["fruit",150],["yogurt",150]]},{n:"موز",t:1,i:[["banana",160]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"خبز بالجبن",t:1,i:[["qariesh",100],["arabread",40]]},{n:"تمر ومكسرات",t:2,i:[["dates",40],["nuts",15]]},{n:"مكسرات",t:2,i:[["nuts",25]]},{n:"تمر باللوز",t:2,i:[["dates",40],["almond",15]]}]}},
+ dz:{name:"الجزائر",flag:"🇩🇿",
+  dialect:{hi:"مرحبا بيك",enc:"يواصل معاك، شوية بشوية تحقق هدفك",water:"ما تنساش تشرب الما",sugar:"نقّص السكر في القهوة والأتاي",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔حوت↔لحم، كسكس↔مكرونة) بنفس السعرات",mh:{breakfast:"فطورك في أول ساعة بعد ما تفيق",lunch:"أكبر وجبة: بروتين + كسكس/مكرونة + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["الكسكس بالمرق الدسم عالي السعرات؛ خفّف اللحم والزيت","الخبز الأبيض بكثرة يرفع السعرات—وازن الكمية","التمر واللوز سناك صحي لكن بحساب","أكثِر من الخضار والشوربة قبل الطبق الرئيسي"],
+  pools:{
+   breakfast:[{n:"خبز بزيت الزيتون والزيتون",t:1,i:[["arabread",90],["oil",12],["olives",20]]},{n:"حمص/فول بالخبز",t:1,i:[["chickpea",200],["arabread",70],["oil",6]]},{n:"روينة بالحليب",t:1,i:[["oats",60],["milk",200],["honey",8]]},{n:"جبن وخبز وزيتون",t:1,i:[["qariesh",150],["arabread",80],["olives",20]]},{n:"زبادي بالتمر والشوفان",t:1,i:[["yogurt",200],["oats",40],["dates",30]]},{n:"بيض بالطماطم (تشكشوكة)",t:2,i:[["egg",150],["tomato",120],["arabread",70],["oil",6]]},{n:"مسمّن/بغرير بالعسل",t:2,i:[["arabread",90],["honey",10],["oil",6]]},{n:"خبز بالجبن والطماطم",t:2,i:[["feta",70],["arabread",80],["tomato",100]]},{n:"مطلوع بالزبدة والعسل",t:2,i:[["arabread",90],["honey",10],["oil",6]]},{n:"بيض بالكاشير",t:3,i:[["egg",120],["beef",50],["arabread",70]]}],
+   lunch:[{n:"كسكس بالخضار (نباتي)",t:1,i:[["couscous",220],["mixveg",180],["oil",8]]},{n:"شربة فريك بالخضار (نباتي)",t:1,i:[["freekeh",150],["mixveg",150],["tomato",100],["oil",6]]},{n:"عدس بالخبز (نباتي)",t:1,i:[["lentil",250],["arabread",70],["salad",120]]},{n:"لوبيا/فاصوليا بالصلصة والخبز",t:1,i:[["whitebean",220],["arabread",70],["tomato",100],["oil",6]]},{n:"رشتة بالخضار",t:1,i:[["pasta",180],["mixveg",150],["tomato",100],["oil",6]]},{n:"شربة فريك بالدجاج",t:2,i:[["chicken",130],["freekeh",150],["mixveg",150],["oil",5]]},{n:"طاجين دجاج بالبطاطا",t:2,i:[["chicken",150],["potato",200],["mixveg",120],["oil",6]]},{n:"كسكس بالدجاج",t:2,i:[["couscous",200],["chicken",140],["mixveg",150]]},{n:"شخشوخة باللحم",t:2,i:[["arabread",110],["beef",110],["mixveg",120],["tomato",80]]},{n:"دولمة/محشي باللحم",t:3,i:[["beef",120],["mixveg",180],["tomato",100],["oil",5]]},{n:"كسكس باللحم",t:3,i:[["couscous",200],["lamb",150],["mixveg",150]]}],
+   dinner:[{n:"حريرة/شربة عدس وخبز",t:1,i:[["lentil",180],["chickpea",80],["tomato",100],["arabread",60]]},{n:"خبز بزيت وطماطم وسلطة",t:1,i:[["arabread",70],["salad",150],["oil",8],["tomato",80]]},{n:"شربة خضار بالشوفان",t:1,i:[["mixveg",180],["oats",40],["arabread",50]]},{n:"زبادي وفواكه",t:1,i:[["yogurt",220],["fruit",150]]},{n:"بطاطا بالفرن بالخضار",t:1,i:[["potato",200],["mixveg",120],["oil",6]]},{n:"بيض بالخضار",t:2,i:[["egg",150],["mixveg",120],["arabread",60],["oil",5]]},{n:"تونة بالسلطة والخبز",t:2,i:[["tuna",100],["arabread",60],["salad",150],["oil",5]]},{n:"رشتة خفيفة بالخضار",t:1,i:[["pasta",150],["mixveg",120],["oil",6]]},{n:"سلطة دجاج مشوي",t:2,i:[["chicken",120],["salad",200],["arabread",50],["oil",6]]},{n:"جبن بالطماطم والزيتون",t:2,i:[["feta",80],["arabread",60],["tomato",120],["olives",15]]}],
+   snack:[{n:"تمر ولوز",t:2,i:[["dates",40],["almond",15]]},{n:"فاكهة وزبادي",t:1,i:[["fruit",150],["yogurt",150]]},{n:"تمر ولبن",t:1,i:[["dates",40],["milk",200]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"خبز بالجبن",t:1,i:[["qariesh",100],["arabread",40]]},{n:"موز",t:1,i:[["banana",160]]},{n:"مكسرات",t:2,i:[["nuts",25]]},{n:"تمر ومكسرات",t:2,i:[["dates",30],["nuts",20]]}]}},
+ tn:{name:"تونس",flag:"🇹🇳",
+  dialect:{hi:"أهلا بيك",enc:"شوية بشوية تحقق هدفك، الأهم ما تبطّلش",water:"ما تنساش تشرب الماء",sugar:"نقّص السكر في القهوة والشاي",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔حوت↔لحم، كسكسي↔مقرونة) بنفس السعرات",mh:{breakfast:"فطورك في أول ساعة بعد ما تفيق",lunch:"أكبر وجبة: بروتين + كسكسي/مقرونة + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["الهريسة قليلة السعرات وتعطي نكهة بدل الدهون","المقالي (بريك مقلي) دسمة—فضّل الفرن","الخبز الأبيض بكثرة يرفع السعرات","أكثِر من السمك والخضار المتوفرين"],
+  pools:{
+   breakfast:[{n:"لبلابي (حمص بالخبز والكمون)",t:1,i:[["chickpea",220],["arabread",70],["oil",8],["harissa",6]]},{n:"بيصار/فول بالخبز",t:1,i:[["ful",200],["arabread",70],["oil",6]]},{n:"دقلة/تمر بالحليب",t:1,i:[["dates",40],["milk",200]]},{n:"خبز بزيت الزيتون والزيتون",t:1,i:[["arabread",90],["oil",12],["olives",20]]},{n:"زبادي بالشوفان والفواكه",t:1,i:[["yogurt",200],["oats",50],["fruit",100]]},{n:"أوجة بيض بالطماطم والفلفل",t:2,i:[["egg",150],["tomato",120],["arabread",70],["oil",6]]},{n:"بريك بالبيض (فرن)",t:2,i:[["egg",120],["arabread",60],["tuna",50],["salad",100]]},{n:"خبز بالتونة والهريسة والزيتون",t:2,i:[["tuna",80],["arabread",90],["olives",15],["harissa",6],["oil",4]]},{n:"جبن وخبز وطماطم",t:1,i:[["feta",70],["arabread",80],["tomato",100]]},{n:"حمص بالطحينة وخبز",t:1,i:[["chickpea",200],["tahini",15],["arabread",70]]}],
+   lunch:[{n:"كسكسي بالخضار (نباتي)",t:1,i:[["couscous",220],["mixveg",180],["oil",8]]},{n:"لبلابي دسم (وجبة)",t:1,i:[["chickpea",250],["arabread",90],["oil",8],["harissa",6]]},{n:"عدس بالخبز (نباتي)",t:1,i:[["lentil",250],["arabread",70],["salad",120]]},{n:"مقرونة بالخضار (نباتي)",t:1,i:[["pasta",180],["mixveg",150],["tomato",100],["oil",7]]},{n:"شربة فريك بالخضار",t:1,i:[["freekeh",150],["mixveg",150],["tomato",100],["oil",6]]},{n:"مقرونة بالدجاج",t:2,i:[["pasta",180],["chicken",130],["tomato",100],["oil",5]]},{n:"كسكسي بالسمك",t:2,i:[["couscous",200],["whitefish",160],["mixveg",150]]},{n:"مرقة/طاجين تونسي بالدجاج",t:2,i:[["chicken",150],["potato",180],["mixveg",120],["oil",6]]},{n:"حوت مشوي بالسلطة المشوية",t:2,i:[["whitefish",200],["salad",180],["arabread",60],["oil",5]]},{n:"كسكسي باللحم",t:3,i:[["couscous",200],["lamb",150],["mixveg",150]]},{n:"كامونية لحم",t:3,i:[["beef",130],["arabread",80],["tomato",100],["oil",5]]}],
+   dinner:[{n:"شربة خضار وخبز",t:1,i:[["mixveg",180],["arabread",60],["tomato",80],["oil",6]]},{n:"لبلابي خفيف",t:1,i:[["chickpea",200],["arabread",60],["harissa",5]]},{n:"عدس شوربة وخبز",t:1,i:[["lentil",200],["arabread",60],["salad",80]]},{n:"زبادي وفواكه",t:1,i:[["yogurt",220],["fruit",150]]},{n:"بطاطا بالفرن بالهريسة",t:1,i:[["potato",200],["mixveg",100],["harissa",8],["oil",6]]},{n:"سلطة تونسية بالتونة والبيض",t:2,i:[["tuna",80],["egg",60],["salad",180],["arabread",50],["oil",5]]},{n:"شكشوكة خضار وبيض",t:2,i:[["egg",120],["mixveg",150],["arabread",60],["oil",6]]},{n:"خبز بالجبن والطماطم",t:2,i:[["feta",80],["arabread",60],["tomato",120],["olives",15]]},{n:"سلطة دجاج مشوي",t:2,i:[["chicken",120],["salad",200],["arabread",50],["oil",6]]},{n:"مقرونة خفيفة بالخضار",t:1,i:[["pasta",150],["mixveg",120],["oil",6]]}],
+   snack:[{n:"تمر ومكسرات",t:2,i:[["dates",40],["nuts",15]]},{n:"فاكهة وزبادي",t:1,i:[["fruit",150],["yogurt",150]]},{n:"دقلة/تمر بالحليب",t:1,i:[["dates",40],["milk",200]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"خبز بالجبن",t:1,i:[["feta",60],["arabread",40]]},{n:"موز",t:1,i:[["banana",160]]},{n:"مكسرات",t:2,i:[["nuts",25]]},{n:"تمر باللوز",t:2,i:[["dates",40],["almond",15]]}]}},
+ ma:{name:"المغرب",flag:"🇲🇦",
+  dialect:{hi:"مرحبا بيك",enc:"شوية بشوية تحقق هدفك، بس ما تبقاش تسنى",water:"ما تنساش تشرب الما",sugar:"نقّص السكر فالأتاي والقهوة",
+   swap:"بدّل بين خيارات الوجبة، والأصناف المتشابهة (دجاج↔حوت↔لحم، كسكس↔خبز) بنفس السعرات",mh:{breakfast:"فطورك في أول ساعة بعد ما تفيق",lunch:"أكبر وجبة: بروتين + كسكس/خبز + خضار",dinner:"عشا خفيف قبل النوم بساعتين ونص",snack:"وجبة خفيفة بين الوجبات"}},
+  tips:["الأتاي بالسكر الكثير يرفع السعرات—نقّص السكر","السردين رخيص وغني بأوميغا-3—أكثِر منه","طاجين اللحم الدسم عالي السعرات؛ فضّل الدجاج/الخضار","الحلويات المغربية مركّزة—خصّها للمناسبات"],
+  pools:{
+   breakfast:[{n:"بيصارة (شوربة فول) بالخبز",t:1,i:[["ful",220],["arabread",80],["oil",8]]},{n:"خبز بزيت الزيتون والعسل",t:1,i:[["arabread",90],["oil",10],["honey",10]]},{n:"حرشة/خبز بالجبن",t:1,i:[["arabread",90],["qariesh",80],["oil",6]]},{n:"خبز بالزيتون والجبن",t:1,i:[["feta",60],["arabread",80],["olives",20]]},{n:"عصيدة/سميدة بالعسل",t:1,i:[["oats",60],["milk",180],["honey",10]]},{n:"زبادي بالشوفان والفواكه",t:1,i:[["yogurt",200],["oats",50],["fruit",100]]},{n:"بيض بالطماطم",t:2,i:[["egg",150],["tomato",120],["arabread",70]]},{n:"بغرير بالعسل",t:2,i:[["arabread",90],["honey",10],["oil",5]]},{n:"مسمّن بالعسل",t:2,i:[["arabread",90],["honey",10],["oil",6]]},{n:"خبز بالطون (تونة) والسلطة",t:2,i:[["tuna",80],["arabread",80],["salad",100]]}],
+   lunch:[{n:"كسكس بالخضار (نباتي)",t:1,i:[["couscous",220],["mixveg",180],["oil",8]]},{n:"طاجين خضار (نباتي)",t:1,i:[["mixveg",220],["potato",150],["arabread",60],["oil",8]]},{n:"عدس بالخبز (نباتي)",t:1,i:[["lentil",250],["arabread",70],["salad",120]]},{n:"لوبيا/فاصوليا بالصلصة (نباتي)",t:1,i:[["whitebean",220],["arabread",70],["tomato",100],["oil",6]]},{n:"زعلوك بالخبز (نباتي)",t:1,i:[["zaalouk",200],["arabread",80],["oil",7]]},{n:"طاجين دجاج بالزيتون والليمون",t:2,i:[["chicken",150],["mixveg",150],["arabread",60],["olives",15],["oil",5]]},{n:"كسكس بالدجاج",t:2,i:[["couscous",200],["chicken",140],["mixveg",150]]},{n:"طاجين سمك (شرمولة)",t:2,i:[["whitefish",180],["potato",150],["mixveg",100],["oil",5]]},{n:"رفيسة دجاج",t:2,i:[["chicken",140],["arabread",100],["lentil",80],["oil",5]]},{n:"طاجين لحم بالخوخ واللوز",t:3,i:[["lamb",160],["mixveg",120],["arabread",60],["almond",10]]},{n:"كسكس باللحم والخضار",t:3,i:[["couscous",200],["lamb",150],["mixveg",150]]}],
+   dinner:[{n:"حريرة (عدس وحمص وطماطم)",t:1,i:[["lentil",150],["chickpea",100],["tomato",120],["arabread",60],["oil",6]]},{n:"سلطة مغربية مشوية بالخبز",t:1,i:[["salad",180],["arabread",70],["tomato",80],["oil",6]]},{n:"زعلوك وخبز",t:1,i:[["zaalouk",180],["arabread",70],["oil",6]]},{n:"شوربة خضار وخبز",t:1,i:[["mixveg",180],["arabread",60],["tomato",80],["oil",6]]},{n:"بطاطا وخضار بالفرن",t:1,i:[["potato",200],["mixveg",120],["oil",6]]},{n:"زبادي وفواكه",t:1,i:[["yogurt",220],["fruit",150]]},{n:"بيض بالخضار",t:2,i:[["egg",150],["mixveg",120],["arabread",60],["oil",5]]},{n:"سردين مشوي بالسلطة",t:2,i:[["sardine",120],["salad",180],["arabread",60],["oil",4]]},{n:"سلطة دجاج مشوي",t:2,i:[["chicken",120],["salad",200],["arabread",50],["oil",6]]},{n:"خبز بالجبن والزيتون",t:1,i:[["feta",70],["arabread",60],["olives",20],["tomato",80]]}],
+   snack:[{n:"تمر ولوز",t:2,i:[["dates",40],["almond",15]]},{n:"فاكهة وزبادي",t:1,i:[["fruit",150],["yogurt",150]]},{n:"تمر بالحليب",t:1,i:[["dates",40],["milk",200]]},{n:"فاكهة موسمية",t:1,i:[["fruit",250]]},{n:"زبادي بالتمر",t:1,i:[["yogurt",170],["dates",30]]},{n:"لبن بالشوفان",t:1,i:[["milk",200],["oats",30]]},{n:"خبز بالجبن",t:1,i:[["feta",60],["arabread",40]]},{n:"موز",t:1,i:[["banana",160]]},{n:"مكسرات",t:2,i:[["nuts",25]]},{n:"تمر ومكسرات",t:2,i:[["dates",30],["nuts",20]]}]}}
+};
+function dietOkItems(items,diet){return items.every(([k])=>{const M=MACRO[k];if(!M)return false;if(diet.veg&&M.tag==="meat")return false;if(diet.noDairy&&M.tag==="dairy")return false;return true;});}
+const SNACK_FALLBACK=["dates","banana","fruit","milk","yogurt","greekyog","qariesh","oats","nuts","almond","pb","honey"];
+function buildMealOptions(countryCode,cat,budget,diet){
+ const C=COUNTRIES[countryCode]||COUNTRIES.eg;
+ let dishes=(C.pools[cat]||[]).filter(d=>d.t<=budget&&dietOkItems(d.i,diet)).slice().sort((a,b)=>a.t-b.t);
+ if(cat==="snack"&&dishes.length<10){
+  const names=new Set(dishes.map(d=>d.n));
+  const cand=SNACK_FALLBACK.filter(k=>{const M=MACRO[k];return M&&(M.t||1)<=budget&&!(diet.noDairy&&M.tag==="dairy")&&!(diet.veg&&M.tag==="meat");});
+  outer: for(let a=0;a<cand.length;a++)for(let b=a+1;b<cand.length;b++){const p=cand[a],q=cand[b],nm=`${MACRO[p].ar} و${MACRO[q].ar}`;if(names.has(nm))continue;names.add(nm);dishes.push({n:nm,t:Math.max(MACRO[p].t,MACRO[q].t),i:[[p,120],[q,25]]});if(dishes.length>=10)break outer;}
+ }
+ return dishes.slice(0,10);
+}
+function regionOf(cc){if(cc==="eg")return"eg";if(cc==="sy")return"levant";if(cc==="sd")return"sudan";if(cc==="sa"||cc==="ye")return"gulf";return"maghreb";}
+function saladsData(cc){
+ const base=[["سلطة خضراء (خيار/طماطم/خس)","طبق ~150جم","~45 سعر","غنية بالألياف والماء، ابدأ بها وجبتك لتقليل الشهية"],["سلطة زبادي بالخيار والنعناع","~150جم","~70 سعر","بروتين خفيف وبروبيوتيك يدعم الهضم"]];
+ const ex={eg:[["سلطة بلدي (طماطم/خيار/جرجير/بصل)","~150جم","~55 سعر","الجرجير غني بالحديد وفيتامين K"],["سلطة طحينة","~60جم","~130 سعر","دهون صحية لكن كثيفة السعرات—بحساب"]],
+  levant:[["تبولة (بقدونس/برغل/طماطم)","~150جم","~120 سعر","البقدونس والليمون مضادات أكسدة، البرغل يشبع"],["فتوش (بدون خبز مقلي)","~150جم","~90 سعر","استخدم خبزًا محمّصًا لا مقليًا لتقليل الدهون"]],
+  gulf:[["سلطة خضار بالليمون","~150جم","~55 سعر","خفيفة ومنعشة، بديل ممتاز للمقبلات الدسمة"],["زحاوق/دقوس (طماطم حارة)","~50جم","~30 سعر","قليلة السعرات وتضيف نكهة بدل الصلصات الدسمة"]],
+  sudan:[["سلطة أسود (باذنجان مشوي)","~120جم","~90 سعر","الشوي أوفر من القلي، خفّف الزيت"],["سلطة طماطم وجرجير","~150جم","~50 سعر","ألياف وفيتامينات بسعرات قليلة"]],
+  maghreb:[["زعلوك (باذنجان مشوي بالطماطم)","~150جم","~110 سعر","لذيذ وصحي—راقب كمية الزيت"],["سلطة مشوية (فلفل/طماطم)","~150جم","~90 سعر","غنية بفيتامين C، شواء بدل قلي"],["سلطة تونسية (خيار/طماطم/فلفل)","~150جم","~80 سعر","منعشة وقليلة السعرات"]]};
+ return base.concat(ex[regionOf(cc)]||[]);
+}
+function saladsHtml(cc){const rows=saladsData(cc).map(s=>`<tr><td>${s[0]}</td><td class="num">${s[1]}</td><td class="num g">${s[2]}</td><td style="color:var(--muted)">${s[3]}</td></tr>`).join("");
+ return `<div class="card"><h4 style="font-weight:800;margin-bottom:4px">🥗 سلطات وأطباق جانبية</h4><p style="font-size:13px;color:var(--muted);margin-bottom:10px">قاعدة ذهبية: ابدأ وجبتك بالسلطة—تملأ المعدة بألياف وسعرات قليلة فتأكل أقل. احذر التتبيلة: ملعقة زيت ≈ 120 سعر.</p><table class="foods"><thead><tr><th>السلطة</th><th>الكمية</th><th>سعرات</th><th>فائدة</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function fruitsHtml(){
+ const F=[["تفاحة متوسطة","~180جم","~95 سعر","ألياف (بكتين) تشبع وتضبط السكر"],["موزة","~120جم","~105 سعر","بوتاسيوم—مثالية قبل/بعد التمرين"],["برتقالة","~140جم","~62 سعر","فيتامين C، كلها بدل عصرها"],["3 حبات تمر","~24جم","~66 سعر","طاقة سريعة—للسناك باعتدال"],["كوب بطيخ","~150جم","~46 سعر","ماء عالٍ ومرطّبة وقليلة السعرات"],["كوب فراولة/توت","~150جم","~50 سعر","الأقل سكرًا والأعلى مضادات أكسدة"],["نصف رمانة","~90جم","~72 سعر","مضادات أكسدة قوية"],["كوب عنب","~150جم","~104 سعر","حلو—راقب الكمية"]];
+ const rows=F.map(x=>`<tr><td>${x[0]}</td><td class="num">${x[1]}</td><td class="num g">${x[2]}</td><td style="color:var(--muted)">${x[3]}</td></tr>`).join("");
+ return `<div class="card"><h4 style="font-weight:800;margin-bottom:4px">🍎 فواكه موسمية</h4><p style="font-size:13px;color:var(--muted);margin-bottom:10px">2–3 حصص يوميًا. كُل الفاكهة كاملة لا عصيرًا (العصير يفقد الألياف ويركّز السكر). فضّل التوت والحمضيات (سكر أقل، ألياف أعلى).</p><table class="foods"><thead><tr><th>الفاكهة</th><th>الحصة</th><th>سعرات</th><th>ملاحظة صحية</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function breadsHtml(cc){
+ const staple={eg:"عيش بلدي",levant:"خبز عربي",gulf:"خبز التنور/عربي",sudan:"كسرة/خبز ذرة",maghreb:"خبز الدار"}[regionOf(cc)];
+ const B=[["خبز أسمر / قمح كامل ⭐","شريحة ~40جم","~99 سعر","الأعلى ألياف والأبطأ في رفع السكر—الأفضل صحيًا"],["عيش بلدي (مصري)","رغيف ~90جم","~240 سعر","من دقيق أسمر جزئيًا—جيد باعتدال، رغيف = ربع احتياجك تقريبًا"],["خبز عربي أبيض","رغيف ~60جم","~165 سعر","أبيض سريع الهضم—قلّل الكمية"],["كسرة/خبز الذرة","قطعة ~80جم","~200 سعر","خالٍ من الجلوتين، وازنه مع بروتين وخضار"],["خبز التنور/شراك","رقاقة ~70جم","~190 سعر","رقيق—سهل الإفراط فيه، احسب العدد"]];
+ const rows=B.map(x=>`<tr><td>${x[0]}</td><td class="num">${x[1]}</td><td class="num g">${x[2]}</td><td style="color:var(--muted)">${x[3]}</td></tr>`).join("");
+ return `<div class="card"><h4 style="font-weight:800;margin-bottom:4px">🥖 أنواع الخبز — خبزك الأساسي: ${staple}</h4><p style="font-size:13px;color:var(--muted);margin-bottom:10px">الخبز أكبر مصدر خفيّ للسعرات في مطبخنا. فضّل <b>الأسمر/القمح الكامل</b> (ألياف أكثر، شبع أطول، سكر أهدأ)، واحسب عدد الأرغفة.</p><table class="foods"><thead><tr><th>النوع</th><th>القطعة</th><th>سعرات</th><th>ملاحظة صحية</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function factsHtml(){
+ return `<div class="card"><h4 style="font-weight:800;margin-bottom:8px">📌 حقائق غذائية دقيقة</h4><ul class="tips">
+  <li><b>البروتين لكل 100جم:</b> صدر دجاج ≈ 31جم · تونة ≈ 26جم · سمك ≈ 26جم · بيضة ≈ 6جم · عدس مطبوخ ≈ 9جم · جبن قريش ≈ 11جم.</li>
+  <li><b>الألياف:</b> كوب عدس ≈ 15جم ألياف، الحمص والفاصوليا والخضار والفاكهة الكاملة تطيل الشبع وتضبط السكر (الهدف 25–35جم يوميًا).</li>
+  <li><b>الدهون:</b> ملعقة زيت ≈ 120 سعر—هي أكثف مصدر للسعرات؛ فضّل زيت الزيتون والمكسرات بكميات محسوبة.</li>
+  <li><b>السكر الخفيّ:</b> كوب عصير/مشروب محلّى قد يحوي 6–10 ملاعق سكر—استبدله بالماء والفاكهة الكاملة.</li>
+  <li><b>الصوديوم:</b> المخللات والمصنّعات والمكعبات ترفع الملح والضغط—قلّلها واعتمد البهارات والليمون.</li>
+  <li><b>الطهي:</b> الشوي/الفرن/السلق أوفر من القلي بمئات السعرات لنفس الطبق.</li>
+ </ul></div>`;
+}
+function scaleOption(o,target){let base=0;o.i.forEach(([k,g])=>base+=MACRO[k].k*g/100);let sc=Math.min(1.9,Math.max(0.45,target/base));const rows=o.i.map(([k,g])=>{const grams=Math.max(5,Math.round(g*sc/5)*5);const M=MACRO[k];return{ar:M.ar,grams,k:Math.round(M.k*grams/100),p:Math.round(M.p*grams/100),c:Math.round(M.c*grams/100),f:Math.round(M.f*grams/100)};});const tot=rows.reduce((a,r)=>({k:a.k+r.k,p:a.p+r.p,c:a.c+r.c,f:a.f+r.f}),{k:0,p:0,c:0,f:0});return{rows,tot};}
+function mealsPlanFor(c,D){
+ const T=(id,fb)=>({breakfast:"الفطار",lunch:"الغداء",dinner:"العشاء",snack:"سناك"}[id]||fb);
+ if(c===3)return[{id:"breakfast",title:"الفطار",share:.30},{id:"lunch",title:"الغداء",share:.40},{id:"dinner",title:"العشاء",share:.30}];
+ if(c===4)return[{id:"breakfast",title:"الفطار",share:.25},{id:"lunch",title:"الغداء",share:.35},{id:"snack",title:"سناك",share:.15},{id:"dinner",title:"العشاء",share:.25}];
+ return[{id:"breakfast",title:"الفطار",share:.25},{id:"snack",title:"سناك صباحي",share:.10},{id:"lunch",title:"الغداء",share:.30},{id:"snack",title:"سناك مسائي",share:.15},{id:"dinner",title:"العشاء",share:.20}];
+}
+
+/* ============ Animated exercise library ============ */
+const EX={
+ squat:{title:"السكوات (القرفصاء)",eq:"بار / دمبل / وزن الجسم",tag:"أرجل — مركّبة",
+   cues:["ادفع الوركين للخلف وانزل كأنك تجلس على كرسي","الظهر مشدود والصدر مرفوع طوال الحركة","انزل حتى يوازي الفخذ الأرض إن أمكن","ادفع من كعبيك للأعلى واعصر المؤخرة"],
+   a:{head:[62,26,7],s:[[62,33,62,74],[62,74,62,100],[62,100,62,128],[62,46,74,52],[74,52,86,50]]},
+   b:{head:[44,54,7],s:[[44,61,52,92],[52,92,80,106],[80,106,60,128],[50,70,66,64],[66,64,80,60]]}},
+ hinge:{title:"الرفعة الميتة / RDL",eq:"بار / دمبل",tag:"سلسلة خلفية",
+   cues:["ادفع الوركين للخلف مع انحناء بسيط بالركبة","الظهر مستقيم دائمًا (لا تقوّسه)","الوزن قريب من ساقيك طوال الحركة","اعصر المؤخرة للأعلى للوقوف"],
+   a:{head:[60,26,7],s:[[60,33,60,76],[60,76,60,102],[60,102,60,128],[60,46,62,74],[62,74,62,88]],load:[52,90,72,90]},
+   b:{head:[38,50,7],s:[[44,55,80,72],[80,72,74,100],[74,100,66,128],[52,58,56,90],[56,90,56,100]],load:[46,98,66,98]}},
+ pushup:{title:"الضغط (بوش أب)",eq:"وزن الجسم",tag:"صدر / دفع",
+   cues:["الجسم خط مستقيم من الرأس للكعب","اليدان أسفل الكتفين مباشرة","انزل حتى يقترب صدرك من الأرض","ادفع مع شدّ البطن والمؤخرة"],
+   a:{head:[88,88,6],s:[[80,94,52,104],[52,104,34,114],[34,114,18,122],[80,94,92,122]]},
+   b:{head:[88,102,6],s:[[80,108,52,112],[52,112,34,116],[34,116,18,122],[80,108,90,108],[90,108,92,122]]}},
+ bench:{title:"ضغط الصدر (بنش)",eq:"بار / دمبل",tag:"صدر / دفع",
+   cues:["استلقِ ولوحا الكتف مسحوبان للخلف","أنزل البار للصدر بتحكّم","ادفع لأعلى في خط مستقيم","لا تفتح المرفقين 90° بالكامل"],
+   a:{head:[24,100,6],s:[[32,102,66,104],[66,104,80,110],[80,110,92,120],[52,104,52,84],[52,84,52,74]],load:[40,72,64,72]},
+   b:{head:[24,100,6],s:[[32,102,66,104],[66,104,80,110],[80,110,92,120],[52,104,46,92],[46,92,54,88]],load:[42,86,64,86]}},
+ row:{title:"التجديف (رو)",eq:"بار / دمبل / كابل",tag:"ظهر / سحب",
+   cues:["انحنِ من الوركين والظهر مستقيم","اسحب الكوع للخلف نحو الخصر","اعصر لوح الكتف في الأعلى","انزل الوزن ببطء وتحكّم"],
+   a:{head:[40,52,6],s:[[46,56,80,74],[80,74,74,100],[74,100,66,128],[58,64,58,92]],load:[50,94,66,94]},
+   b:{head:[40,52,6],s:[[46,56,80,74],[80,74,74,100],[74,100,66,128],[58,64,64,80],[64,80,54,72]],load:[46,70,60,70]}},
+ press:{title:"ضغط الكتف (أوفرهيد)",eq:"بار / دمبل",tag:"كتف / دفع",
+   cues:["ابدأ والوزن عند مستوى الكتف","اضغط لأعلى حتى تمتد الذراع","شدّ البطن ولا تقوّس ظهرك","انزل بتحكّم للكتف مجددًا"],
+   a:{head:[60,24,7],s:[[60,31,60,76],[60,76,60,102],[60,102,60,128],[56,42,50,54],[50,54,58,44]],load:[46,40,66,40]},
+   b:{head:[60,24,7],s:[[60,31,60,76],[60,76,60,102],[60,102,60,128],[56,42,58,22],[58,22,58,10]],load:[46,10,68,10]}},
+ lunge:{title:"الطعنات (لَنجز)",eq:"دمبل / وزن الجسم",tag:"أرجل — أحادية",
+   cues:["اخطُ للأمام ثم انزل عموديًا","الركبة الأمامية فوق الكاحل لا تتخطاه","الجذع مرفوع والبطن مشدود","ادفع من كعب الرجل الأمامية للعودة"],
+   a:{head:[60,26,7],s:[[60,33,60,74],[60,74,58,100],[58,100,58,128],[60,74,64,100],[64,100,64,128]]},
+   b:{head:[58,45,7],s:[[58,52,58,86],[58,86,84,104],[84,104,84,128],[58,86,40,110],[40,110,52,128]]}},
+ plank:{title:"البلانك (ثبات)",eq:"وزن الجسم — تمرين ثبات",tag:"مركز الجسم (Core)",
+   cues:["ثبّت على الساعدين والقدمين","الجسم خط مستقيم — لا ترفع المؤخرة","اشدّ البطن والمؤخرة طوال الوقت","تنفّس بهدوء واثبت للمدة المطلوبة"],
+   a:{head:[90,104,6],s:[[82,106,50,112],[50,112,18,122],[82,106,82,120],[82,120,96,120]]},
+   b:{head:[90,101,6],s:[[82,103,50,109],[50,109,18,120],[82,103,82,120],[82,120,96,120]]}},
+ bridge:{title:"جسر المؤخرة",eq:"وزن الجسم / دمبل",tag:"مؤخرة / سلسلة خلفية",
+   cues:["استلقِ والركبتان مثنيتان والقدمان على الأرض","ارفع الوركين حتى يستقيم الجسم","اعصر المؤخرة في الأعلى ثانية","انزل ببطء دون لمس الأرض تمامًا"],
+   a:{head:[22,116,6],s:[[30,116,60,116],[60,116,78,104],[78,104,90,122]]},
+   b:{head:[22,112,6],s:[[30,112,58,100],[58,100,78,104],[78,104,90,122]]}},
+ curl:{title:"مرجحة البايسبس (كرل)",eq:"دمبل / بار",tag:"ذراع أمامية",
+   cues:["المرفقان ثابتان بجانب الجسم","ارفع الوزن بعصر عضلة الذراع","لا تتأرجح بظهرك للمساعدة","انزل ببطء للاستطالة الكاملة"],
+   a:{head:[60,24,7],s:[[60,31,60,76],[60,76,60,102],[60,102,60,128],[58,44,58,66],[58,66,66,80]],load:[60,80,74,80]},
+   b:{head:[60,24,7],s:[[60,31,60,76],[60,76,60,102],[60,102,60,128],[58,44,58,66],[58,66,62,50]],load:[54,46,68,46]}}
+};
+function drawPose(p,cls){
+  let s=`<g class="${cls}"><circle cx="${p.head[0]}" cy="${p.head[1]}" r="${p.head[2]}" class="fig-fill"/>`;
+  p.s.forEach(g=>s+=`<line x1="${g[0]}" y1="${g[1]}" x2="${g[2]}" y2="${g[3]}" class="fig-line"/>`);
+  p.s.forEach(g=>s+=`<circle cx="${g[2]}" cy="${g[3]}" r="2.3" class="fig-joint"/>`);
+  if(p.load)s+=`<line x1="${p.load[0]}" y1="${p.load[1]}" x2="${p.load[2]}" y2="${p.load[3]}" class="fig-load"/>`;
+  return s+`</g>`;
+}
+function exSVG(key){const e=EX[key];return `<svg viewBox="0 0 120 138" class="ex-svg" role="img" aria-label="${e.title}"><line x1="8" y1="132" x2="112" y2="132" class="fig-ground"/>${drawPose(e.a,"pose-a")}${drawPose(e.b,"pose-b")}</svg>`;}
+function exCard(key){const e=EX[key];return `<div class="ex-card"><div class="ex-stage animate">${exSVG(key)}</div><h4>${e.title}</h4><div class="ex-eq">${e.eq}</div><ul>${e.cues.map(c=>`<li>${c}</li>`).join("")}</ul><span class="ex-tag">${e.tag}</span></div>`;}
+
+/* ============ Workout ============ */
+const GYM={
+ fbA:["سكوات بالبار — 4×8||squat","بنش برس — 4×8||bench","تجديف بالبار — 4×10||row","ضغط كتف بالدمبل — 3×12||press","بلانك — 3×45ث||plank"],
+ fbB:["رفعة ميتة رومانية — 4×8||hinge","صدر مائل بالدمبل — 4×10||bench","سحب أمامي (لات) — 4×10||row","طعنات بالدمبل — 3×12||lunge","بايسبس بالبار — 3×12||curl"],
+ fbC:["ليج برس — 4×12||squat","ضغط كتف بالبار — 4×8||press","تجديف كابل — 4×12||row","جسر المؤخرة — 3×15||bridge","بلانك — 3×45ث||plank"],
+ up1:["بنش برس — 4×8||bench","تجديف بالبار — 4×10||row","ضغط كتف — 3×10||press","لات بول — 3×12||row","بايسبس — 3×12||curl"],
+ lo1:["سكوات — 4×8||squat","رفعة ميتة رومانية — 4×10||hinge","ليج برس — 3×12||squat","جسر المؤخرة — 3×15||bridge","بطن — 3×15||plank"],
+ up2:["صدر مائل — 4×10||bench","تجديف كابل — 4×12||row","ضغط كتف بالدمبل — 4×10||press","بايسبس مطرقة — 3×12||curl","ترايسبس — 3×12||bench"],
+ lo2:["سكوات أمامي — 4×10||squat","طعنات مشي — 3×12||lunge","رفعة ميتة رومانية — 3×12||hinge","جسر المؤخرة — 3×15||bridge","بطن — 3×15||plank"],
+ push:["بنش برس — 4×8||bench","صدر مائل — 3×10||bench","ضغط كتف بالبار — 4×8||press","رفرفة جانبي — 3×15||press","ترايسبس — 3×12||bench"],
+ pull:["رفعة ميتة — 3×6||hinge","لات بول / عقلة — 4×10||row","تجديف بالبار — 4×10||row","بايسبس بالبار — 3×12||curl","سحب وجه — 3×15||row"],
+ legs:["سكوات — 4×8||squat","رفعة ميتة رومانية — 4×10||hinge","ليج برس — 3×12||squat","طعنات — 3×12||lunge","جسر المؤخرة — 3×15||bridge"]
+};
+const HOME={
+ fbA:["سكوات جوبلت — 4×12||squat","ضغط (بوش أب) — 4×12||pushup","تجديف بالدمبل — 4×12||row","ضغط كتف بالدمبل — 3×12||press","بلانك — 3×45ث||plank"],
+ fbB:["طعنات — 3×12||lunge","ضغط مائل — 4×12||pushup","تجديف منحني — 4×12||row","جسر المؤخرة — 3×15||bridge","بطن — 3×20||plank"],
+ fbC:["سكوات — 4×15||squat","ضغط ماسي — 3×10||pushup","تجديف بالدمبل — 4×12||row","بايسبس دمبل — 3×12||curl","بلانك — 3×45ث||plank"],
+ up1:["ضغط — 4×12||pushup","تجديف بالدمبل — 4×12||row","ضغط كتف بالدمبل — 3×12||press","بايسبس دمبل — 3×12||curl","ترايسبس على كرسي — 3×12||pushup"],
+ lo1:["سكوات جوبلت — 4×12||squat","طعنات — 3×12||lunge","جسر المؤخرة — 4×15||bridge","سمانة واقف — 4×20||squat","بطن — 3×15||plank"],
+ up2:["ضغط واسع — 4×12||pushup","تجديف منحني — 4×12||row","بايك بوش أب — 3×10||press","بايسبس دمبل — 3×12||curl","ترايسبس — 3×12||pushup"],
+ lo2:["سكوات بلغاري — 3×10||lunge","رفعة رومانية بالدمبل — 4×12||hinge","جسر برجل — 3×12||bridge","سمانة — 4×20||squat","بطن — 3×20||plank"],
+ push:["ضغط — 4×12||pushup","ضغط مائل — 3×12||pushup","ضغط كتف بالدمبل — 4×10||press","رفرفة جانبي — 3×15||press","ترايسبس — 3×12||pushup"],
+ pull:["تجديف بالدمبل — 4×12||row","تجديف منحني — 4×12||row","سوبرمان — 3×15||bridge","بايسبس دمبل — 3×12||curl","سحب منشفة — 3×20ث||row"],
+ legs:["سكوات جوبلت — 4×12||squat","طعنات — 3×12||lunge","رفعة رومانية بالدمبل — 4×12||hinge","جسر المؤخرة — 3×15||bridge","سمانة — 4×20||squat"]
+};
+function buildWorkout(days,place){
+ const P=place==="gym"?GYM:HOME;
+ if(days<=2)return[{t:"اليوم 1 — جسم كامل (أ)",l:P.fbA},{t:"اليوم 2 — جسم كامل (ب)",l:P.fbB}];
+ if(days===3)return[{t:"اليوم 1 — جسم كامل (أ)",l:P.fbA},{t:"اليوم 2 — جسم كامل (ب)",l:P.fbB},{t:"اليوم 3 — جسم كامل (ج)",l:P.fbC}];
+ if(days===4)return[{t:"اليوم 1 — علوي (أ)",l:P.up1},{t:"اليوم 2 — سفلي (أ)",l:P.lo1},{t:"اليوم 3 — علوي (ب)",l:P.up2},{t:"اليوم 4 — سفلي (ب)",l:P.lo2}];
+ if(days===5)return[{t:"اليوم 1 — دفع",l:P.push},{t:"اليوم 2 — سحب",l:P.pull},{t:"اليوم 3 — أرجل",l:P.legs},{t:"اليوم 4 — علوي",l:P.up1},{t:"اليوم 5 — سفلي",l:P.lo1}];
+ return[{t:"اليوم 1 — دفع",l:P.push},{t:"اليوم 2 — سحب",l:P.pull},{t:"اليوم 3 — أرجل",l:P.legs},{t:"اليوم 4 — دفع",l:P.push},{t:"اليوم 5 — سحب",l:P.pull},{t:"اليوم 6 — أرجل",l:P.legs}];
+}
+function usedPatterns(workout){const set=new Set();workout.forEach(d=>d.l.forEach(x=>set.add(x.split("||")[1])));return[...set].filter(k=>EX[k]);}
+
+/* ============ Timeline ============ */
+function buildTimeline(c,meals){
+ const wake=toMin(state.wake),bed=toMin(state.bed),ev=[];
+ ev.push({t:wake,cls:"",tt:"الاستيقاظ",td:"كوب ماء 500 مل + ضوء طبيعي — يضبط ساعتك البيولوجية."});
+ const firstMeal=wake+60,lastMeal=bed-150,span=Math.max(120,lastMeal-firstMeal);
+ meals.forEach((m,i)=>{const t=meals.length===1?firstMeal:Math.round(firstMeal+span*i/(meals.length-1));ev.push({t,cls:"food",tt:`${m.title} — ~${m.kcal} سعر`,td:m.hint});});
+ let wt;if(state.wtime==="morning")wt=wake+45;else if(state.wtime==="afternoon")wt=Math.max(wake+300,16*60);else wt=Math.min(bed-180,19*60);
+ ev.push({t:wt,cls:"move",tt:"التمرين (45–60 دقيقة)",td:state.wtime==="morning"?"تمرين صباحي — موزة/تمرة قبله والفطار بعده مباشرة.":"إحماء 5 دقائق ثم التمرين، وأقرب وجبة بعده هي الأهم للاستشفاء."});
+ ev.push({t:bed-60,cls:"sleep",tt:"روتين ما قبل النوم",td:"إضاءة خافتة، بعيدًا عن الشاشات، بدون كافيين."});
+ ev.push({t:bed,cls:"sleep",tt:"النوم",td:`استهدف ${(c.sleepMin/60).toFixed(1).replace(".0","")} ساعات — النوم يضبط هرمونات الجوع.`});
+ ev.sort((a,b)=>((a.t-wake+1440)%1440)-((b.t-wake+1440)%1440));
+ return ev;
+}
+
+/* ============ Render ============ */
+function ringSVG(c){
+ const R=86,C=2*Math.PI*R,total=c.protein*4+c.carbs*4+c.fat*9;
+ const segs=[{v:c.protein*4/total,col:"var(--green)"},{v:c.carbs*4/total,col:"var(--amber)"},{v:c.fat*9/total,col:"var(--rose)"}];
+ let off=0,circles="";segs.forEach(s=>{const len=s.v*C-6;circles+=`<circle class="ring-anim" cx="110" cy="110" r="${R}" fill="none" stroke="${s.col}" stroke-width="20" stroke-linecap="round" stroke-dasharray="${Math.max(2,len)} ${C}" stroke-dashoffset="${-off*C}"></circle>`;off+=s.v;});
+ return `<svg width="220" height="220" viewBox="0 0 220 220" aria-hidden="true"><circle cx="110" cy="110" r="86" fill="none" stroke="var(--line)" stroke-width="20"></circle>${circles}</svg>`;
+}
+function projSVG(c){
+ if(c.goal==="maintain")return"";
+ const W=640,H=220,pad=42,w0=state.weight,w1=state.target,yMax=Math.max(w0,w1)+2,yMin=Math.min(w0,w1)-2;
+ const y=v=>pad+(yMax-v)/(yMax-yMin)*(H-2*pad),x=t=>pad+t*(W-2*pad),pts=[];
+ for(let i=0;i<=20;i++){const t=i/20,ease=c.goal==="lose"?1-Math.pow(1-t,1.35):Math.pow(t,1.15);pts.push([x(t),y(w0+(w1-w0)*ease)]);}
+ const path=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" ");
+ const gridY=[w0,w1].map(v=>`<line x1="${pad}" x2="${W-pad}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="4 5"/>`).join("");
+ const wkLbls=[0,Math.round(c.weeks/2),c.weeks].map((wk,i)=>`<text x="${x(i/2)}" y="${H-10}" font-size="12" fill="var(--muted)" text-anchor="middle">أسبوع ${wk}</text>`).join("");
+ return `<svg id="projSvg" viewBox="0 0 ${W} ${H}" role="img" aria-label="منحنى الوزن المتوقع">${gridY}<text x="${W-pad+4}" y="${y(w0)+4}" font-size="12" fill="var(--muted)">${w0} كجم</text><text x="${W-pad+4}" y="${y(w1)+4}" font-size="12" fill="var(--green-deep)" font-weight="700">${w1} كجم</text><path d="${path}" fill="none" stroke="var(--green)" stroke-width="4" stroke-linecap="round"/><circle cx="${x(0)}" cy="${y(w0)}" r="6" fill="var(--ink)"/><circle cx="${x(1)}" cy="${y(w1)}" r="7" fill="var(--green)" stroke="#fff" stroke-width="2.5"/>${wkLbls}</svg>`;
+}
+let MEAL_STATE=[];
+function mealCard(mt,target,idx,note,swap){
+ const opts=buildMealOptions(state.country,mt.id,state.budget,{veg:state.veg,noDairy:state.noDairy});
+ MEAL_STATE[idx]={opts,kcal:target};
+ const tabs=opts.map((o,i)=>`<button data-mc="${idx}" data-opt="${i}" class="${i===0?"on":""}">${o.n}</button>`).join("");
+ return `<div class="card meal-card" data-mealcard="${idx}" data-kcal="${target}"><div class="meal-head"><h4>${mt.title}</h4><span class="meal-kcal num">≈ ${target} سعر</span></div><div class="opt-tabs">${tabs}</div><div class="opt-body">${renderOption(opts[0],target)}</div><div class="swap-note">💡 <b>مرن:</b> ${swap}${note?`<br>${note}`:""}</div></div>`;
+}
+function renderOption(o,kcal){const{rows,tot}=scaleOption(o,kcal);const trs=rows.map(r=>`<tr><td>${r.ar}</td><td class="g num">${r.grams} جم</td><td class="num">${r.k}</td><td class="num">${r.p}</td><td class="num">${r.c}</td><td class="num">${r.f}</td></tr>`).join("");return `<table class="foods"><thead><tr><th>الصنف</th><th>الكمية</th><th>سعرات</th><th>بروتين</th><th>كارب</th><th>دهون</th></tr></thead><tbody>${trs}<tr class="tot-row"><td><b>الإجمالي</b></td><td></td><td class="num"><b>${tot.k}</b></td><td class="num"><b>${tot.p}</b></td><td class="num"><b>${tot.c}</b></td><td class="num"><b>${tot.f}</b></td></tr></tbody></table><div class="meal-total num">≈ ${tot.k} سعر · بروتين ${tot.p}جم · كارب ${tot.c}جم · دهون ${tot.f}جم — الكميات بالجرام بعد الطبخ.</div>`;}
+
+function labSection(analysis){
+ if(!analysis.items.length)return"";
+ const sysMeta={inbody:["💪","تكوين الجسم (InBody)"],sugar:["🩸","السكري وسكر الدم"],liver:["🫀","الكبد ودهون الكبد"],kidney:["🧪","وظائف الكلى"],lipid:["🧈","دهون الدم والضغط"],other:["☀️","فيتامينات وأخرى"]};
+ const order=["inbody","sugar","liver","kidney","lipid","other"];const badge={ok:"طبيعي",warn:"انتبه",bad:"مرتفع/خارج النطاق"};
+ let html="";
+ order.forEach(sys=>{
+  const list=analysis.items.filter(i=>i.sys===sys);if(!list.length)return;
+  html+=`<div class="sys-title"><span class="si" style="background:var(--green-soft)">${sysMeta[sys][0]}</span>${sysMeta[sys][1]}</div><div class="lab-grid">`;
+  list.forEach(i=>{html+=`<div class="lab-item ${i.status}"><div class="lh"><span class="lname">${i.name}</span><span class="lval num">${i.val}${i.unit?" <span style='font-size:12px;color:var(--muted)'>"+i.unit+"</span>":""}</span></div><div class="lref">المرجع: ${i.ref}</div><span class="lbadge">${badge[i.status]}</span><div class="lref" style="margin-top:6px">${i.tip}</div></div>`;});
+  html+=`</div>`;
+ });
+ const adapts=adaptationList(analysis.flags);
+ if(adapts.length)html+=`<div class="adapt"><h4>🔧 كيف تكيّفت خطتك مع تحاليلك</h4><ul>${adapts.map(a=>`<li>${a}</li>`).join("")}</ul></div>`;
+ return `<div class="section"><h3><span class="dot"></span>قراءة حالتك الصحية</h3><div class="card">${html}<p class="lref" style="margin-top:16px">📌 هذه قراءة تثقيفية تعتمد نطاقات مرجعية عامة للبالغين، وقد تختلف حسب المعمل — التشخيص والعلاج من اختصاص طبيبك.</p></div></div>`;
+}
+
+function buildPlan(){
+ MEAL_STATE=[];
+ const analysis=analyzeMed(),flags=analysis.flags,c=calc(flags),s=state;
+ const CO=COUNTRIES[s.country]||COUNTRIES.eg, D=CO.dialect;
+ const budgetTxt=["","اقتصادي","متوسط","مرتفع"][s.budget];
+ const goalTxt=c.goal==="lose"?"خسارة الوزن":c.goal==="gain"?"زيادة الوزن":"تثبيت الوزن";
+ const name=s.name?`${D.hi} ${s.name}`:D.hi;
+ const bmiState=c.bmi<18.5?"نحافة":c.bmi<25?"وزن صحي":c.bmi<30?"زيادة وزن":"سمنة";
+ const mealNote=c.metabolic?"🩸 <b>لحالتك:</b> فضّل الحبوب الكاملة والألياف وقلّل السكر — خيارات الخطة منخفضة المؤشر الجلايسيمي.":"";
+ const mealsDef=mealsPlanFor(s.meals,D).map(m=>{const kcal=Math.round(c.kcal*m.share/10)*10;return{...m,kcal,hint:(D.mh&&D.mh[m.id])||"وجبة متوازنة."};});
+
+ const warnTarget=c.bmiT<18.5?`<div class="warn">⚠️ وزنك المستهدف (${s.target} كجم) تحت النطاق الصحي لطولك (${c.healthyMin}–${c.healthyMax} كجم). اجعل هدفك ${c.healthyMin} كجم على الأقل.</div>`:"";
+ const warnFloor=c.floored?`<div class="warn">ℹ️ ثُبّتت سعراتك عند الحد الأدنى الآمن (${c.kcal}). النزول أكثر يضر بصحتك وعضلاتك — اختر وتيرة أهدأ أو زد الحركة.</div>`:"";
+ const warnSleep=c.sleepMin<7*60?`<div class="warn">😴 نومك ${(c.sleepMin/60).toFixed(1)} ساعة فقط. أقل من 7 ساعات يرفع هرمون الجوع ويبطئ نتائجك.</div>`:"";
+ const warnProt=c.proteinCapped?`<div class="warn">🧪 خُفّض البروتين لحماية كليتيك بناءً على تحاليلك. لا ترفعه إلا بموافقة طبيبك.</div>`:"";
+ const warnMed=(flags.diabetes||flags.kidneySevere)?`<div class="warn blue">🩺 نظرًا لنتائجك، ننصح بشدة بمراجعة طبيبك قبل بدء العجز الحراري — خصوصًا مع أدوية السكر أو حالة الكلى.</div>`:"";
+
+ const timeline=buildTimeline(c,mealsDef);
+ const workout=buildWorkout(s.days,s.place);
+ const patterns=usedPatterns(workout);
+ const restDays=7-s.days;
+ const cardio=c.goal==="lose"?`🔥 <b>الكارديو:</b> ${c.steps} خطوة يوميًا + جلستا كارديو خفيف 25–30 دقيقة أسبوعيًا.`:c.goal==="gain"?`🔥 <b>الكارديو:</b> ${c.steps} خطوة يوميًا تكفي — لا تفرط فيه حتى لا تحرق فائض البناء.`:`🔥 <b>الكارديو:</b> ${c.steps} خطوة يوميًا + جلسة أسبوعية للياقة القلب.`;
+
+ const projBlock=c.goal==="maintain"
+  ?`<div class="card"><p style="font-size:15px">هدفك <b>تثبيت وزنك</b> عند ${s.weight} كجم — الخطة مبنية على سعرات الاتزان (${c.tdee}) مع التركيز على الجودة والقوة والنوم. راقب وزنك أسبوعيًا وعدّل ±150 سعرًا عند الحاجة.</p></div>`
+  :`<div class="card"><div class="proj-meta num"><span>📅 المدة: <b>${c.weeks} أسبوعًا</b></span><span>🎯 الوصول المتوقع: <b>${fmtDate(c.eta)}</b></span><span>⚖️ الوتيرة: <b>${s.pace} كجم/أسبوع</b> (${c.goal==="lose"?"عجز":"فائض"} ${c.delta} سعر/يوم)</span></div>${projSVG(c)}<p style="font-size:13px;color:var(--muted);margin-top:10px">المنحنى تقديري — قارن <b>متوسط الأسبوع بالأسبوع السابق</b> لا يومًا بيوم.</p></div>`;
+
+ const dash=$("#dash");
+ dash.innerHTML=`
+  <div class="dash-head"><div><h2>خطتك الشاملة جاهزة ${name} 🎉</h2>
+   <p style="color:var(--muted);font-size:14px;margin-top:2px">${D.enc}</p>
+   <div class="chips"><span class="chip t">${CO.flag} ${CO.name}</span><span class="chip i">المستوى: ${budgetTxt}</span><span class="chip g">الهدف: ${goalTxt}</span><span class="chip a num">BMI: ${c.bmi} (${bmiState})</span><span class="chip i num">الوزن الصحي: ${c.healthyMin}–${c.healthyMax} كجم</span>${med.bf!=null?`<span class="chip t num">دهون: ${med.bf}%</span>`:""}${c.usedMeasuredBMR?`<span class="chip t">أيض من InBody</span>`:""}</div></div>
+   <div class="actions"><button class="btn btn-ghost" id="btnEdit">✏️ تعديل</button><button class="btn btn-primary" id="btnPrint">🖨️ طباعة / PDF</button></div></div>
+  ${warnMed}${warnTarget}${warnFloor}${warnProt}${warnSleep}
+  <div class="section"><div class="card hero"><div class="ring-wrap">${ringSVG(c)}<div class="ring-center"><span class="big num" id="kcalNum">0</span><span class="lbl">سعر حراري / يوم</span></div></div>
+   <div class="macro-legend">
+    <div class="macro-row"><span class="sw" style="background:var(--green)"></span><span class="nm">بروتين</span><span class="macro-bar"><i style="background:var(--green)" data-w="${Math.round(c.protein*400/c.kcal)}"></i></span><span class="val num">${c.protein} جم · ${c.protein*4} سعر</span></div>
+    <div class="macro-row"><span class="sw" style="background:var(--amber)"></span><span class="nm">كربوهيدرات</span><span class="macro-bar"><i style="background:var(--amber)" data-w="${Math.round(c.carbs*400/c.kcal)}"></i></span><span class="val num">${c.carbs} جم · ${c.carbs*4} سعر</span></div>
+    <div class="macro-row"><span class="sw" style="background:var(--rose)"></span><span class="nm">دهون</span><span class="macro-bar"><i style="background:var(--rose)" data-w="${Math.round(c.fat*900/c.kcal)}"></i></span><span class="val num">${c.fat} جم · ${c.fat*9} سعر</span></div>
+   </div><div class="hero-note">قاعدة 80/20: التزم 80٪ من الوقت واترك 20٪ للمرونة — الاستمرارية تغلب المثالية.</div></div></div>
+
+  <div class="section"><h3><span class="dot"></span>أرقامك الأساسية</h3><div class="stats">
+   <div class="stat"><div class="k">الأيض الأساسي BMR${c.usedMeasuredBMR?" (مقاس)":""}</div><div class="v num">${c.bmr}</div><div class="u">سعر/يوم</div></div>
+   <div class="stat"><div class="k">إجمالي الحرق TDEE</div><div class="v num">${c.tdee}</div><div class="u">سعر/يوم</div></div>
+   <div class="stat"><div class="k">سعرات خطتك</div><div class="v num" style="color:var(--green-deep)">${c.kcal}</div><div class="u">سعر/يوم</div></div>
+   <div class="stat"><div class="k">الماء</div><div class="v num">${c.water}</div><div class="u">لتر/يوم</div></div>
+   <div class="stat"><div class="k">الخطوات</div><div class="v num" style="font-size:19px;padding-top:6px">${c.steps}</div><div class="u">خطوة/يوم</div></div>
+   <div class="stat"><div class="k">النوم المستهدف</div><div class="v num">7–9</div><div class="u">ساعات</div></div>
+  </div></div>
+
+  ${labSection(analysis)}
+
+  <div class="section"><h3><span class="dot"></span>رحلتك نحو ${s.target} كجم</h3>${projBlock}</div>
+
+  <div class="section"><h3><span class="dot"></span>روتين يومك المقترح</h3><div class="card"><div class="timeline">
+   ${timeline.map(e=>`<div class="t-item ${e.cls}"><div class="tm num">${fmtT(e.t)}</div><div class="tt">${e.tt}</div><div class="td">${e.td}</div></div>`).join("")}
+  </div></div></div>
+
+  <div class="section"><h3><span class="dot"></span>خطة الوجبات (${s.meals} وجبات · ${c.kcal} سعر)</h3>
+   <p style="font-size:14px;color:var(--muted);margin-bottom:12px">أطباق فعلية من مطبخ ${CO.name} حسب مستواك (${budgetTxt}) — حتى <b>10 خيارات مكتملة</b> لكل وجبة، بدّل بينها بحرية.</p>
+   ${mealsDef.map((m,i)=>mealCard(m,m.kcal,i,mealNote,D.swap)).join("")}</div>
+
+  <div class="section"><h3><span class="dot"></span>سلطات وفواكه وخبز — تفاصيل دقيقة</h3>
+   ${saladsHtml(s.country)}
+   <div style="height:14px"></div>${fruitsHtml()}
+   <div style="height:14px"></div>${breadsHtml(s.country)}
+   <div style="height:14px"></div>${factsHtml()}
+  </div>
+
+  <div class="section"><h3><span class="dot"></span>شرح الحركات بالرسوم المتحرّكة</h3><div class="card"><p style="font-size:14px;color:var(--muted);margin-bottom:14px">رسوم توضيحية متحرّكة تُظهر بداية ونهاية كل حركة مع أهم نقاط الأداء الصحيح — شاهدها قبل التمرين.</p><div class="ex-grid">${patterns.map(exCard).join("")}</div></div></div>
+
+  <div class="section"><h3><span class="dot"></span>برنامج التدريب (${s.days} أيام · ${s.place==="gym"?"جيم":"منزل"})</h3><div class="card"><div class="wk-grid">
+   ${workout.map(d=>`<div class="wk-day"><h4>${d.t}</h4><ul>${d.l.map(x=>{const[nm]=x.split("||");return `<li>${nm}</li>`;}).join("")}</ul></div>`).join("")}
+  </div><div class="wk-extra">${cardio}<br>😌 <b>الراحة:</b> ${restDays} ${restDays===1?"يوم":"أيام"} أسبوعيًا — فيها يُبنى الجسم فعليًا.</div></div></div>
+
+  <div class="section"><h3><span class="dot"></span>نصائح خاصة بمطبخ ${CO.name}</h3><div class="card"><ul class="tips">
+   <li>${D.water}.</li><li>${D.sugar}.</li>${CO.tips.map(t=>`<li>${t}</li>`).join("")}
+  </ul></div></div>
+
+  <div class="section"><h3><span class="dot"></span>النوم والمتابعة</h3><div class="two-col">
+   <div class="card"><h4 style="font-weight:800;margin-bottom:10px">🌙 جودة النوم</h4><ul class="tips"><li>ثبّت موعد النوم والاستيقاظ يوميًا.</li><li>غرفة مظلمة باردة وبدون هاتف قبل النوم بساعة.</li><li>آخر كافيين قبل النوم بـ8 ساعات.</li><li>عشاء خفيف غني بالبروتين يحسّن الاستشفاء.</li></ul></div>
+   <div class="card"><h4 style="font-weight:800;margin-bottom:10px">📊 المتابعة والتعديل</h4><ul class="tips"><li>اوزن نفسك 3–4 مرات أسبوعيًا صباحًا واحسب المتوسط.</li><li>ثبت المتوسط أسبوعين؟ عدّل ±100–150 سعرًا.</li><li>البروتين أولوية يومية موزّعة على الوجبات.</li><li>أعد تحاليلك كل 3 أشهر لمتابعة تحسّن حالتك.</li></ul></div>
+  </div></div>
+
+  <div class="section"><h3><span class="dot"></span>المنهجية والمصادر</h3><div class="card"><ul class="tips">
+   <li><b>الطاقة (BMR/TDEE):</b> معادلة Mifflin-St Jeor المعتمدة من الأكاديمية الأمريكية للتغذية وعلوم الحمية.</li>
+   <li><b>أهداف الماكروز:</b> بروتين 1.6–2.6 جم/كجم حسب الهدف (توصيات الجمعية الدولية للتغذية الرياضية ISSN)، دهون 25–35٪ من السعرات، والباقي كربوهيدرات.</li>
+   <li><b>قيم الأطعمة</b> (سعرات وبروتين لكل 100جم) مستمدة من جداول التركيب الغذائي القياسية (USDA FoodData Central وما يعادلها إقليميًا)، وقد تختلف قليلًا حسب طريقة الطهي.</li>
+   <li><b>النطاقات المرجعية للتحاليل</b> نطاقات عامة للبالغين، وتختلف حسب المعمل والحالة.</li>
+  </ul></div></div>
+
+  <p class="disclaimer">خطة إرشادية مبنية على معادلات ومراجع علمية معتمدة ونطاقات مرجعية عامة، وليست تشخيصًا أو بديلًا عن طبيب أو أخصائي تغذية — خاصة مع وجود حالة صحية، حمل، أدوية، أو لمن هم دون 18 عامًا.</p>`;
+
+ $("#wizard").style.display="none";dash.style.display="block";window.scrollTo({top:0,behavior:"smooth"});
+ $("#btnEdit").addEventListener("click",()=>{dash.style.display="none";$("#wizard").style.display="block";showStep(1);});
+ $("#btnPrint").addEventListener("click",()=>window.print());
+ dash.addEventListener("click",e=>{const b=e.target.closest(".opt-tabs button");if(!b)return;const card=b.closest("[data-mealcard]");$$(".opt-tabs button",card).forEach(x=>x.classList.remove("on"));b.classList.add("on");const idx=+card.dataset.mealcard,st=MEAL_STATE[idx];$(".opt-body",card).innerHTML=renderOption(st.opts[+b.dataset.opt],st.kcal);});
+ animateNumber($("#kcalNum"),c.kcal,1100);
+ requestAnimationFrame(()=>$$(".macro-bar i",dash).forEach(i=>i.style.width=Math.min(100,+i.dataset.w)+"%"));
+}
+function animateNumber(el,to,dur){const t0=performance.now();function tick(t){const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=Math.round(to*e).toLocaleString("en");if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
+showStep(1);
+
+/* ============ Visitor counter (global) ============ */
+(function(){
+  var el=document.getElementById("visitorCount");
+  if(!el)return;
+  var NS="ahmed-fouly-health-planner",KEY="visits";
+  function show(n){el.textContent=Number(n).toLocaleString("en");}
+  function localFallback(){
+    try{
+      var k="afhp_visits_local",n=parseInt(localStorage.getItem(k)||"0",10);
+      if(!n)n=1000+Math.floor(Math.random()*400);
+      n++;localStorage.setItem(k,String(n));show(n);
+    }catch(e){el.textContent="—";}
+  }
+  if(typeof fetch==="undefined"){localFallback();return;}
+  fetch("https://abacus.jasoncameron.dev/hit/"+NS+"/"+KEY)
+   .then(function(r){return r.json();})
+   .then(function(j){var n=(j&&(j.value!=null?j.value:j.count));if(n==null)throw 0;show(n);})
+   .catch(function(){
+     fetch("https://api.counterapi.dev/v1/"+NS+"/"+KEY+"/up")
+      .then(function(r){return r.json();})
+      .then(function(j){var n=(j&&(j.count!=null?j.count:j.value));if(n==null)throw 0;show(n);})
+      .catch(localFallback);
+   });
+})();
+</script>
+</body>
+</html>
